@@ -25,72 +25,72 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static final Mode currentMode = Mode.REAL;
+    public static final Mode currentMode = Mode.REAL;
 
-  public static enum Mode {
-    /** Running on a real robot. */
-    REAL,
+    public static enum Mode {
+        /** Running on a real robot. */
+        REAL,
 
-    /** Running a physics simulator. */
-    SIM,
+        /** Running a physics simulator. */
+        SIM,
 
-    /** Replaying from a log file. */
-    REPLAY
-  }
+        /** Replaying from a log file. */
+        REPLAY
+    }
 
-  public static class SwerveConstants {
-    public static final byte FRONT_LEFT_DRIVE_ID = 4;
-    public static final byte FRONT_RIGHT_DRIVE_ID = 22;
-    public static final byte BACK_LEFT_DRIVE_ID = 24;
-    public static final byte BACK_RIGHT_DRIVE_ID = 26;
+    public static class SwerveConstants {
+        public static final byte FRONT_LEFT_DRIVE_ID = 4;
+        public static final byte FRONT_RIGHT_DRIVE_ID = 22;
+        public static final byte BACK_LEFT_DRIVE_ID = 24;
+        public static final byte BACK_RIGHT_DRIVE_ID = 26;
 
-    public static final byte FRONT_LEFT_TURN_ID = 29;
-    public static final byte FRONT_RIGHT_TURN_ID = 28;
-    public static final byte BACK_LEFT_TURN_ID = 23;
-    public static final byte BACK_RIGHT_TURN_ID = 25;
+        public static final byte FRONT_LEFT_TURN_ID = 29;
+        public static final byte FRONT_RIGHT_TURN_ID = 28;
+        public static final byte BACK_LEFT_TURN_ID = 23;
+        public static final byte BACK_RIGHT_TURN_ID = 25;
 
-    public static final int DrivingMotorPinionTeeth = 13;
+        public static final int DrivingMotorPinionTeeth = 13;
 
-    // Invert the turning encoder, since the output shaft rotates in the opposite
-    // direction of
-    // the steering motor in the MAXSwerve Module.
-    public static final boolean TurningEncoderInverted = true;
+        // Invert the turning encoder, since the output shaft rotates in the opposite
+        // direction of
+        // the steering motor in the MAXSwerve Module.
+        public static final boolean TurningEncoderInverted = true;
 
-    // Calculations required for driving motor conversion factors and feed forward
-    public static final double WheelDiameterMeters = Units.inchesToMeters(3);
-    public static final double WheelCircumferenceMeters = WheelDiameterMeters * Math.PI;
-    // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
-    // teeth on the bevel pinion
-    public static final double DrivingMotorReduction = (45.0 * 22) / (DrivingMotorPinionTeeth * 15);
+        // Calculations required for driving motor conversion factors and feed forward
+        public static final double WheelDiameterMeters = Units.inchesToMeters(3);
+        public static final double WheelCircumferenceMeters = WheelDiameterMeters * Math.PI;
+        // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
+        // teeth on the bevel pinion
+        public static final double DrivingMotorReduction = (45.0 * 22) / (DrivingMotorPinionTeeth * 15);
 
-    public static final double kDrivingMotorFreeSpeedRps = 5676 / 60;
-    public static final double TurningEncoderPositionFactor = (2 * Math.PI); // radians
-    public static final double TurningEncoderVelocityFactor =
-        (2 * Math.PI) / 60.0; // radians per second
-    public static final double kDriveWheelFreeSpeedMps =
-        (kDrivingMotorFreeSpeedRps * WheelCircumferenceMeters) / DrivingMotorReduction;
-    public static final double TurningEncoderPositionPIDMinInput = 0; // radians
-    public static final double TurningEncoderPositionPIDMaxInput =
-        TurningEncoderPositionFactor; // radians
+        public static final double kDrivingMotorFreeSpeedRps = 5676 / 60;
+        public static final double TurningEncoderPositionFactor = (2 * Math.PI); // radians
+        public static final double TurningEncoderVelocityFactor =
+                (2 * Math.PI) / 60.0; // radians per second
+        public static final double kDriveWheelFreeSpeedMps =
+                (kDrivingMotorFreeSpeedRps * WheelCircumferenceMeters) / DrivingMotorReduction;
+        public static final double TurningEncoderPositionPIDMinInput = 0; // radians
+        public static final double TurningEncoderPositionPIDMaxInput =
+                TurningEncoderPositionFactor; // radians
 
-    public static final double DrivingP = 0.4;
-    public static final double DrivingI = 0;
-    public static final double DrivingD = 0;
-    public static final double DrivingFF = 1 / kDriveWheelFreeSpeedMps;
-    public static final double DrivingMinOutput = -1;
-    public static final double DrivingMaxOutput = 1;
+        public static final double DrivingP = 0.4;
+        public static final double DrivingI = 0;
+        public static final double DrivingD = 0;
+        public static final double DrivingFF = 1 / kDriveWheelFreeSpeedMps;
+        public static final double DrivingMinOutput = -1;
+        public static final double DrivingMaxOutput = 1;
 
-    public static final double TurningP = 0.45;
-    public static final double TurningI = 0;
-    public static final double TurningD = 0;
-    public static final double TurningFF = 0;
-    public static final double TurningMinOutput = -1;
-    public static final double TurningMaxOutput = 1;
+        public static final double TurningP = 0.45;
+        public static final double TurningI = 0;
+        public static final double TurningD = 0;
+        public static final double TurningFF = 0;
+        public static final double TurningMinOutput = -1;
+        public static final double TurningMaxOutput = 1;
 
-    public static final IdleMode DrivingMotorIdleMode = IdleMode.kBrake;
-    public static final IdleMode TurningMotorIdleMode = IdleMode.kBrake;
+        public static final IdleMode DrivingMotorIdleMode = IdleMode.kBrake;
+        public static final IdleMode TurningMotorIdleMode = IdleMode.kBrake;
 
-    public static final int DrivingMotorCurrentLimit = 40; // amps
-    public static final int TurningMotorCurrentLimit = 20; // amps
-  }
+        public static final int DrivingMotorCurrentLimit = 40; // amps
+        public static final int TurningMotorCurrentLimit = 20; // amps
+    }
 }
