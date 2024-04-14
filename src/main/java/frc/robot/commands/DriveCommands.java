@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.drive.Drivetrain;
 import java.util.function.DoubleSupplier;
 
@@ -60,9 +61,9 @@ public class DriveCommands {
                     // Convert to field relative speeds & send command
                     drivetrain.runVelocity(
                             ChassisSpeeds.fromFieldRelativeSpeeds(
-                                    linearVelocity.getX() * drivetrain.getMaxLinearSpeedMetersPerSec(),
-                                    linearVelocity.getY() * drivetrain.getMaxLinearSpeedMetersPerSec(),
-                                    omega * drivetrain.getMaxAngularSpeedRadPerSec(),
+                                    linearVelocity.getX() * SwerveConstants.MAX_LINEAR_SPEED,
+                                    linearVelocity.getY() * SwerveConstants.MAX_LINEAR_SPEED,
+                                    omega * SwerveConstants.MAX_ANGULAR_SPEED,
                                     drivetrain.isRedAlliance()
                                             ? drivetrain.getRotation().plus(new Rotation2d(Math.PI))
                                             : drivetrain.getRotation()));

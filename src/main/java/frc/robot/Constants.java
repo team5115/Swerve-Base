@@ -49,26 +49,33 @@ public final class Constants {
         public static final byte BACK_LEFT_TURN_ID = 23;
         public static final byte BACK_RIGHT_TURN_ID = 25;
 
-        public static final int DrivingMotorPinionTeeth = 13;
+        public static final double MAX_LINEAR_SPEED = 4.8; // meters per second
+        public static final double TRACK_WIDTH_X = Units.inchesToMeters(23.75);
+        public static final double TRACK_WIDTH_Y = Units.inchesToMeters(23.75);
+        public static final double DRIVE_BASE_RADIUS =
+                Math.hypot(TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0);
+        public static final double MAX_ANGULAR_SPEED = MAX_LINEAR_SPEED / DRIVE_BASE_RADIUS;
 
+        
         // Invert the turning encoder, since the output shaft rotates in the opposite
         // direction of
         // the steering motor in the MAXSwerve Module.
         public static final boolean TurningEncoderInverted = true;
-
+        
         // Calculations required for driving motor conversion factors and feed forward
         public static final double WheelDiameterMeters = Units.inchesToMeters(3);
         public static final double WheelCircumferenceMeters = WheelDiameterMeters * Math.PI;
-        // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
-        // teeth on the bevel pinion
-        public static final double DrivingMotorReduction = (45.0 * 22) / (DrivingMotorPinionTeeth * 15);
 
-        public static final double kDrivingMotorFreeSpeedRps = 5676 / 60;
+        // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear
+        // 15 teeth on the bevel pinion, 13 teeth on the driving motor
+        public static final double DrivingMotorReduction = (45.0 * 22.0) / (13.0 * 15.0);
+
+        public static final double DrivingMotorFreeSpeedRps = 5676 / 60;
         public static final double TurningEncoderPositionFactor = (2 * Math.PI); // radians
         public static final double TurningEncoderVelocityFactor =
                 (2 * Math.PI) / 60.0; // radians per second
-        public static final double kDriveWheelFreeSpeedMps =
-                (kDrivingMotorFreeSpeedRps * WheelCircumferenceMeters) / DrivingMotorReduction;
+        public static final double DriveWheelFreeSpeedMps =
+                (DrivingMotorFreeSpeedRps * WheelCircumferenceMeters) / DrivingMotorReduction;
         public static final double TurningEncoderPositionPIDMinInput = 0; // radians
         public static final double TurningEncoderPositionPIDMaxInput =
                 TurningEncoderPositionFactor; // radians
@@ -76,7 +83,7 @@ public final class Constants {
         public static final double DrivingP = 0.4;
         public static final double DrivingI = 0;
         public static final double DrivingD = 0;
-        public static final double DrivingFF = 1 / kDriveWheelFreeSpeedMps;
+        public static final double DrivingFF = 1 / DriveWheelFreeSpeedMps;
         public static final double DrivingMinOutput = -1;
         public static final double DrivingMaxOutput = 1;
 

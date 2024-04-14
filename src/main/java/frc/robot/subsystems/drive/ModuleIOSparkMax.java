@@ -55,22 +55,22 @@ public class ModuleIOSparkMax implements ModuleIO {
             case 0: // Front Left
                 driveId = SwerveConstants.FRONT_LEFT_DRIVE_ID;
                 turnId = SwerveConstants.FRONT_LEFT_TURN_ID;
-                angularOffsetDegrees = 90;
+                angularOffsetDegrees = 270;
                 break;
             case 1: // Front Right
                 driveId = SwerveConstants.FRONT_RIGHT_DRIVE_ID;
                 turnId = SwerveConstants.FRONT_RIGHT_TURN_ID;
-                angularOffsetDegrees = 180;
+                angularOffsetDegrees = 0;
                 break;
             case 2: // Back Left
                 driveId = SwerveConstants.BACK_LEFT_DRIVE_ID;
                 turnId = SwerveConstants.BACK_LEFT_TURN_ID;
-                angularOffsetDegrees = 0;
+                angularOffsetDegrees = 180;
                 break;
             case 3: // Back Right
                 driveId = SwerveConstants.BACK_RIGHT_DRIVE_ID;
                 turnId = SwerveConstants.BACK_RIGHT_TURN_ID;
-                angularOffsetDegrees = 270;
+                angularOffsetDegrees = 90;
                 break;
             default:
                 throw new RuntimeException("Invalid module index");
