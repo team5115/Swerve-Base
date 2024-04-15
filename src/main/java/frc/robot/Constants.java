@@ -56,12 +56,11 @@ public final class Constants {
                 Math.hypot(TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0);
         public static final double MAX_ANGULAR_SPEED = MAX_LINEAR_SPEED / DRIVE_BASE_RADIUS;
 
-        
         // Invert the turning encoder, since the output shaft rotates in the opposite
         // direction of
         // the steering motor in the MAXSwerve Module.
         public static final boolean TurningEncoderInverted = true;
-        
+
         // Calculations required for driving motor conversion factors and feed forward
         public static final double WheelDiameterMeters = Units.inchesToMeters(3);
         public static final double WheelCircumferenceMeters = WheelDiameterMeters * Math.PI;

@@ -14,7 +14,6 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -30,12 +29,7 @@ import frc.robot.subsystems.drive.GyroIONavx;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkMax;
-import frc.robot.subsystems.flywheel.Flywheel;
-import frc.robot.subsystems.flywheel.FlywheelIO;
-import frc.robot.subsystems.flywheel.FlywheelIOSim;
-import frc.robot.subsystems.flywheel.FlywheelIOSparkMax;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -47,16 +41,12 @@ public class RobotContainer {
     // Subsystems
     private final GyroIO gyro;
     private final Drivetrain drivetrain;
-    private final Flywheel flywheel;
 
     // Controller
     private final CommandXboxController joyDrive = new CommandXboxController(0);
-    private final CommandXboxController joyManips = new CommandXboxController(1);
 
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
-    private final LoggedDashboardNumber flywheelSpeedInput =
-            new LoggedDashboardNumber("Flywheel Speed", 1500.0);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -71,7 +61,6 @@ public class RobotContainer {
                                 new ModuleIOSparkMax(1),
                                 new ModuleIOSparkMax(2),
                                 new ModuleIOSparkMax(3));
-                flywheel = new Flywheel(new FlywheelIOSparkMax());
                 break;
 
             case SIM:
@@ -80,7 +69,6 @@ public class RobotContainer {
                 drivetrain =
                         new Drivetrain(
                                 gyro, new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim());
-                flywheel = new Flywheel(new FlywheelIOSim());
                 break;
 
             default:
@@ -89,16 +77,10 @@ public class RobotContainer {
                 drivetrain =
                         new Drivetrain(
                                 gyro, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
-                flywheel = new Flywheel(new FlywheelIO() {});
                 break;
         }
 
         // Set up auto routines
-        NamedCommands.registerCommand(
-                "Run Flywheel",
-                Commands.startEnd(
-                                () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop, flywheel)
-                        .withTimeout(5.0));
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
         // Set up SysId routines
@@ -112,16 +94,6 @@ public class RobotContainer {
                 "Drive SysId (Dynamic Forward)", drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
         autoChooser.addOption(
                 "Drive SysId (Dynamic Reverse)", drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-        autoChooser.addOption(
-                "Flywheel SysId (Quasistatic Forward)",
-                flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        autoChooser.addOption(
-                "Flywheel SysId (Quasistatic Reverse)",
-                flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        autoChooser.addOption(
-                "Flywheel SysId (Dynamic Forward)", flywheel.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        autoChooser.addOption(
-                "Flywheel SysId (Dynamic Reverse)", flywheel.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
         // Configure the button bindings
         configureButtonBindings();
@@ -143,12 +115,6 @@ public class RobotContainer {
 
         joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
         joyDrive.b().onTrue(resetFieldOrientation());
-
-        joyManips
-                .a()
-                .whileTrue(
-                        Commands.startEnd(
-                                () -> flywheel.runVelocity(flywheelSpeedInput.get()), flywheel::stop, flywheel));
     }
 
     /**
