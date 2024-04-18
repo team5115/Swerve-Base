@@ -15,6 +15,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import java.io.File;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -60,7 +61,12 @@ public class Robot extends LoggedRobot {
         switch (Constants.currentMode) {
             case REAL:
                 // Running on a real robot, log to a USB stick ("/U/logs")
-                Logger.addDataReceiver(new WPILOGWriter());
+                String path = "/U/logs";
+                var directory = new File(path);
+                if (!directory.exists()) {
+                    directory.mkdir();
+                }
+                Logger.addDataReceiver(new WPILOGWriter(path));
                 Logger.addDataReceiver(new NT4Publisher());
                 break;
 
