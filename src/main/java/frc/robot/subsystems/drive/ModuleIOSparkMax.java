@@ -101,9 +101,6 @@ public class ModuleIOSparkMax implements ModuleIO {
 
         turnEncoder.setAverageDepth(2);
 
-        driveSparkMax.setCANTimeout(0);
-        turnSparkMax.setCANTimeout(0);
-
         driveSparkMax.setIdleMode(SwerveConstants.DrivingMotorIdleMode);
         turnSparkMax.setIdleMode(SwerveConstants.TurningMotorIdleMode);
 
@@ -114,18 +111,18 @@ public class ModuleIOSparkMax implements ModuleIO {
     @Override
     public void updateInputs(ModuleIOInputs inputs) {
         inputs.drivePositionRad =
-                Units.rotationsToRadians(driveEncoder.getPosition())
-                        / SwerveConstants.DrivingMotorReduction;
+                Units.rotationsToRadians(
+                        driveEncoder.getPosition() / SwerveConstants.DrivingMotorReduction);
         inputs.driveVelocityRadPerSec =
-                Units.rotationsPerMinuteToRadiansPerSecond(driveEncoder.getVelocity())
-                        / SwerveConstants.DrivingMotorReduction;
+                Units.rotationsPerMinuteToRadiansPerSecond(
+                        driveEncoder.getVelocity() / SwerveConstants.DrivingMotorReduction);
         inputs.driveAppliedVolts = driveSparkMax.getAppliedOutput() * driveSparkMax.getBusVoltage();
-        inputs.driveCurrentAmps = new double[] {driveSparkMax.getOutputCurrent()};
+        inputs.driveCurrentAmps = driveSparkMax.getOutputCurrent();
         inputs.turnAbsolutePosition =
                 Rotation2d.fromRotations(turnEncoder.getPosition()).minus(absoluteEncoderOffset);
         inputs.turnVelocityRadPerSec = Units.rotationsToRadians(turnEncoder.getVelocity());
         inputs.turnAppliedVolts = turnSparkMax.getAppliedOutput() * turnSparkMax.getBusVoltage();
-        inputs.turnCurrentAmps = new double[] {turnSparkMax.getOutputCurrent()};
+        inputs.turnCurrentAmps = turnSparkMax.getOutputCurrent();
     }
 
     @Override
