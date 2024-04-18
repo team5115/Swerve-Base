@@ -40,5 +40,6 @@
     "editor.detectIndentation": false
   },
   "editor.detectIndentation": false,
-  "files.autoSave": "afterDelay"
+  "files.autoSave": "afterDelay",
+  "java.debug.settings.onBuildFailureProceed": true
 }

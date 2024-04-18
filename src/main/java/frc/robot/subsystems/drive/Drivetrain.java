@@ -193,6 +193,7 @@ public class Drivetrain extends SubsystemBase {
         // Log setpoint states
         Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
         Logger.recordOutput("SwerveStates/SetpointsOptimized", optimizedSetpointStates);
+        Logger.recordOutput("ChassisSpeedsDiscrete", discreteSpeeds);
     }
 
     /** Stops the drive. */

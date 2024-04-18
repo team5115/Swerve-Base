@@ -46,7 +46,7 @@ public class Module {
             case REPLAY:
                 driveFeedforward = new SimpleMotorFeedforward(0.1, 0.13);
                 driveFeedback = new PIDController(0.05, 0.0, 0.0);
-                turnFeedback = new PIDController(7.0, 0.0, 0.0);
+                turnFeedback = new PIDController(0.1, 0.0, 0.0);
                 break;
             case SIM:
                 driveFeedforward = new SimpleMotorFeedforward(0.0, 0.13);
@@ -70,8 +70,9 @@ public class Module {
 
         // Run closed loop turn control
         if (angleSetpoint != null) {
-            io.setTurnVoltage(
-                    turnFeedback.calculate(getAngle().getRadians(), angleSetpoint.getRadians()));
+            double turnVoltage =
+                    turnFeedback.calculate(getAngle().getRadians(), angleSetpoint.getRadians());
+            io.setTurnVoltage(turnVoltage);
 
             // Run closed loop drive control
             // Only allowed if closed loop turn control is running
@@ -85,9 +86,15 @@ public class Module {
 
                 // Run drive controller
                 double velocityRadPerSec = adjustSpeedSetpoint / WHEEL_RADIUS;
-                io.setDriveVoltage(
+                double driveVoltage =
                         driveFeedforward.calculate(velocityRadPerSec)
-                                + driveFeedback.calculate(inputs.driveVelocityRadPerSec, velocityRadPerSec));
+                                + driveFeedback.calculate(inputs.driveVelocityRadPerSec, velocityRadPerSec);
+                io.setDriveVoltage(driveVoltage);
+
+                // Logger.recordOutput("ModuleVoltage/DriveVoltage/Index" + Integer.toString(index),
+                // driveVoltage);
+                // Logger.recordOutput("ModuleVoltage/TurnVoltage/Index" + Integer.toString(index),
+                // turnVoltage);
             }
         }
     }
