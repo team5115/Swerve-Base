@@ -49,28 +49,27 @@ public class ModuleIOSparkMax implements ModuleIO {
     public ModuleIOSparkMax(int index) {
         int driveId = -1;
         int turnId = -1;
-        double angularOffsetDegrees = -1;
 
         switch (index) {
             case 0: // Front Left
                 driveId = SwerveConstants.FRONT_LEFT_DRIVE_ID;
                 turnId = SwerveConstants.FRONT_LEFT_TURN_ID;
-                angularOffsetDegrees = 270;
+                absoluteEncoderOffset = SwerveConstants.FRONT_LEFT_ANGULAR_OFFSET;
                 break;
             case 1: // Front Right
                 driveId = SwerveConstants.FRONT_RIGHT_DRIVE_ID;
                 turnId = SwerveConstants.FRONT_RIGHT_TURN_ID;
-                angularOffsetDegrees = 0;
+                absoluteEncoderOffset = SwerveConstants.FRONT_RIGHT_ANGULAR_OFFSET;
                 break;
             case 2: // Back Left
                 driveId = SwerveConstants.BACK_LEFT_DRIVE_ID;
                 turnId = SwerveConstants.BACK_LEFT_TURN_ID;
-                angularOffsetDegrees = 180;
+                absoluteEncoderOffset = SwerveConstants.BACK_LEFT_ANGULAR_OFFSET;
                 break;
             case 3: // Back Right
                 driveId = SwerveConstants.BACK_RIGHT_DRIVE_ID;
                 turnId = SwerveConstants.BACK_RIGHT_TURN_ID;
-                angularOffsetDegrees = 90;
+                absoluteEncoderOffset = SwerveConstants.BACK_RIGHT_ANGULAR_OFFSET;
                 break;
             default:
                 throw new RuntimeException("Invalid module index");
@@ -78,7 +77,6 @@ public class ModuleIOSparkMax implements ModuleIO {
 
         driveSparkMax = new CANSparkMax(driveId, MotorType.kBrushless);
         turnSparkMax = new CANSparkMax(turnId, MotorType.kBrushless);
-        absoluteEncoderOffset = Rotation2d.fromDegrees(angularOffsetDegrees);
 
         driveSparkMax.restoreFactoryDefaults();
         turnSparkMax.restoreFactoryDefaults();

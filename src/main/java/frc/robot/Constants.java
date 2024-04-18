@@ -14,6 +14,7 @@
 package frc.robot;
 
 import com.revrobotics.CANSparkBase.IdleMode;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -25,7 +26,7 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final Mode currentMode = Mode.REAL;
+    public static final Mode currentMode = Mode.REPLAY;
 
     public static enum Mode {
         /** Running on a real robot. */
@@ -48,6 +49,11 @@ public final class Constants {
         public static final byte FRONT_RIGHT_TURN_ID = 28;
         public static final byte BACK_LEFT_TURN_ID = 23;
         public static final byte BACK_RIGHT_TURN_ID = 25;
+
+        public static final Rotation2d FRONT_LEFT_ANGULAR_OFFSET = Rotation2d.fromDegrees(90);
+        public static final Rotation2d FRONT_RIGHT_ANGULAR_OFFSET = Rotation2d.fromDegrees(180);
+        public static final Rotation2d BACK_LEFT_ANGULAR_OFFSET = Rotation2d.fromDegrees(0);
+        public static final Rotation2d BACK_RIGHT_ANGULAR_OFFSET = Rotation2d.fromDegrees(270);
 
         public static final double MAX_LINEAR_SPEED = 4.8; // meters per second
         public static final double TRACK_WIDTH_X = Units.inchesToMeters(23.75);
