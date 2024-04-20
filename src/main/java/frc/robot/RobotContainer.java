@@ -89,7 +89,7 @@ public class RobotContainer {
         }
 
         // Register auto commands for pathplanner
-        AutoCommands.registerCommands(drivetrain);
+        AutoCommands.registerCommands(drivetrain, shooter);
         // Set up auto routines
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
@@ -126,9 +126,16 @@ public class RobotContainer {
         // joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
         joyDrive.start().onTrue(resetFieldOrientation());
         joyDrive.back().onTrue(shooter.vomit()).onFalse(shooter.stop());
+
         joyDrive.a().onTrue(DriveCommands.intakeUntilNote(shooter));
-        joyDrive.b().onTrue(DriveCommands.prepareShoot(shooter, 5, true)).onFalse(DriveCommands.triggerShoot(shooter));
-        joyDrive.x().onTrue(DriveCommands.prepareAmp(shooter)).onFalse(DriveCommands.triggerAmp(shooter));
+        joyDrive
+                .b()
+                .onTrue(DriveCommands.prepareShoot(shooter, 15, true))
+                .onFalse(DriveCommands.triggerShoot(shooter));
+        joyDrive
+                .x()
+                .onTrue(DriveCommands.prepareAmp(shooter))
+                .onFalse(DriveCommands.triggerAmp(shooter));
     }
 
     /**

@@ -77,19 +77,19 @@ public class DriveCommands {
 
     public static Command prepareShoot(Shooter shooter, double angle, boolean neverExit) {
         return Commands.parallel(
-            // TODO deploy arm
-            new SpinUpShooter(shooter, 5000, neverExit)
-        ).withInterruptBehavior(InterruptionBehavior.kCancelSelf);
+                        // TODO deploy arm
+                        new SpinUpShooter(shooter, 5000, neverExit))
+                .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
     public static Command triggerShoot(Shooter shooter) {
         return Commands.sequence(
-            shooter.setSideSpeeds(+1),
-            Commands.waitSeconds(0.5),
-            shooter.stopIntake(),
-            shooter.stopSides(),
-            shooter.stopAux()
-        ).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+                        shooter.setSideSpeeds(+1),
+                        Commands.waitSeconds(0.5),
+                        shooter.stopIntake(),
+                        shooter.stopSides(),
+                        shooter.stopAux())
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
 
     /**

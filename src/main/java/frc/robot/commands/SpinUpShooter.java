@@ -3,7 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.shooter.Shooter;
 
-public class SpinUpShooter extends Command{
+public class SpinUpShooter extends Command {
     private final Shooter shooter;
     private final double pid_tolerance;
     private final double rpm;
