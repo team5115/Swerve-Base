@@ -3,11 +3,16 @@ package frc.robot.subsystems.shooter;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
+
+    public static final Rotation2d AMPER_IN_ANGLE = Rotation2d.fromDegrees(0);
+    public static final Rotation2d AMPER_OUT_ANGLE = Rotation2d.fromDegrees(178);
 
     private final ShooterIO io;
     private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
@@ -55,66 +60,63 @@ public class Shooter extends SubsystemBase {
         io.setAmperPercent(percent);
     }
 
-    public void stopAmper() {
-        io.setAmperPercent(0);
+    public Command waitForDetectionState(boolean state) {
+        return Commands.waitUntil(() -> inputs.noteDetected == state);
     }
 
-    public boolean isDetecting() {
-        return inputs.noteDetected;
+    public Command intake() {
+        return setIntakeSpeed(+1);
     }
 
-    public void centerNote() {
-        io.setLeftPercent(0.08);
-        io.setRightPercent(0.08);
+    public Command outtake() {
+        return setIntakeSpeed(-1);
     }
 
-    public void fastInSides() {
-        io.setLeftPercent(1);
-        io.setRightPercent(1);
+    public Command stopIntake() {
+        return setIntakeSpeed(+0);
     }
 
-    public void fastOutSides() {
-        io.setLeftPercent(-0.9);
-        io.setRightPercent(-0.9);
+    public Command stopSides() {
+        return setSideSpeeds(0);
     }
 
-    public void shooterBackwards() {
-        io.setLeftPercent(-1);
-        io.setRightPercent(-1);
-        io.setAuxPercent(-1);
+    public Command stopAux() {
+        return setAuxSpeed(0);
     }
 
-    public void stopShooterMotors() {
-        io.setLeftVoltage(0);
-        io.setRightVoltage(0);
-        io.setAuxVoltage(0);
+    public Command centerNote() {
+        return setSideSpeeds(0.08);
     }
 
-    public void stopSideMotors() {
-        io.setLeftVoltage(0);
-        io.setRightVoltage(0);
+    public Command setAuxSpeed(double percent) {
+        return Commands.runOnce(() -> io.setAuxPercent(percent), this);
     }
 
-    public void ampRackSpeed() {
-        io.setLeftPercent(0.25);
-        io.setRightPercent(0.25);
-        io.setAuxPercent(0);
+    public Command setIntakeSpeed(double percent) {
+        return Commands.runOnce(() -> io.setIntakePercent(percent), this);
     }
 
-    public void intake() {
-        io.setIntakePercent(+1);
+    public Command setSideSpeeds(double percent) {
+        return Commands.runOnce(
+                () -> {
+                    io.setLeftPercent(percent);
+                    io.setRightPercent(percent);
+                },
+                this);
     }
 
-    public void outtake() {
-        io.setIntakePercent(-1);
-    }
-
-    public void outtakeAmp() {
-        io.setIntakePercent(-0.9);
-    }
-
-    public void stopIntake() {
-        io.setIntakePercent(0);
+    public double spinAmper(Rotation2d setpoint) {
+        // Add an offset onto the Rot2d and then good subtract it back off to get a value in
+        // the range
+        // of [-60, +300] instead of [-180, 180]
+        final double offset = 120;
+        final Rotation2d offset2d = Rotation2d.fromDegrees(offset);
+        final double pidOutput =
+                amperPID.calculate(
+                        inputs.amperPosition.plus(offset2d).getDegrees() - offset,
+                        setpoint.plus(offset2d).getDegrees() - offset);
+        io.setAmperPercent(pidOutput);
+        return pidOutput;
     }
 
     public double spinAuxByPid(double rpm) {
@@ -126,16 +128,28 @@ public class Shooter extends SubsystemBase {
         return volts;
     }
 
-    public double spinAmperByPid(Rotation2d setpoint) {
-        // Add an offset onto the Rot2d and then good subtract it back off to get a value in the range
-        // of [-60, +300] instead of [-180, 180]
-        final double offset = 120;
-        final Rotation2d offset2d = Rotation2d.fromDegrees(offset);
-        final double pidOutput =
-                amperPID.calculate(
-                        inputs.amperPosition.plus(offset2d).getDegrees() - offset,
-                        setpoint.plus(offset2d).getDegrees() - offset);
-        io.setAmperPercent(pidOutput);
-        return pidOutput;
+    /** This command does NOT require the shooter subsystem so that it can override all else */
+    public Command vomit() {
+        return Commands.runOnce(
+                () -> {
+                    io.setIntakePercent(-1);
+                    io.setLeftPercent(-0.9);
+                    io.setRightPercent(-0.9);
+                    io.setAuxPercent(-0.9);
+                });
+    }
+
+    /**
+     * This command does NOT require the shooter subsystem. This means it should not be in auto
+     * command groups. It also does NOT stop the amper
+     */
+    public Command stop() {
+        return Commands.runOnce(
+                () -> {
+                    io.setIntakePercent(0);
+                    io.setLeftPercent(0);
+                    io.setRightPercent(0);
+                    io.setAuxPercent(0);
+                });
     }
 }
