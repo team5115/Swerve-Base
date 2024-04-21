@@ -28,7 +28,7 @@ public class ShooterIOSim implements ShooterIO {
         leftSim = new FlywheelSim(DCMotor.getNEO(+1), +1.0, guessedInertia);
         rightSim = new FlywheelSim(DCMotor.getNEO(+1), +1.0, guessedInertia);
         auxSim = new FlywheelSim(DCMotor.getNEO(+1), +1.0, guessedInertia);
-        intakeSim = new DCMotorSim(DCMotor.getNEO(+1), +1.0, guessedInertia); // ! find gearing
+        intakeSim = new DCMotorSim(DCMotor.getNEO(+1), +1.0, guessedInertia);
         amperSim = new DCMotorSim(snowblowerPlant, +1.0, guessedInertia);
     }
 
