@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shooter;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
@@ -21,17 +22,14 @@ public class ShooterIOSim implements ShooterIO {
     private double amperAppliedVolts;
 
     public ShooterIOSim() {
-        // TODO determine gearings and moments of inertia for the shooter and intake motors
-
-        leftSim = new FlywheelSim(DCMotor.getNEO(1), 0, 0);
-        rightSim = new FlywheelSim(DCMotor.getNEO(1), 0, 0);
-        auxSim = new FlywheelSim(DCMotor.getNEO(1), 0, 0);
-
-        intakeSim = new DCMotorSim(DCMotor.getNEO(1), 0, 0);
-
-        // TODO determine traits for the snowblower motor
-        DCMotor snowblowerPlant = new DCMotor(0, 0, 0, 0, 0, 0);
-        amperSim = new DCMotorSim(snowblowerPlant, 0, 0);
+        final DCMotor snowblowerPlant = new DCMotor(+12.0, +7.909, +24.0, +5.0, +10.472, +1);
+        // TODO find moments of inertia and 2 more gearings
+        final double guessedInertia = 0.00080645;
+        leftSim = new FlywheelSim(DCMotor.getNEO(+1), +1.0, guessedInertia);
+        rightSim = new FlywheelSim(DCMotor.getNEO(+1), +1.0, guessedInertia);
+        auxSim = new FlywheelSim(DCMotor.getNEO(+1), +1.0, guessedInertia);
+        intakeSim = new DCMotorSim(DCMotor.getNEO(+1), +1.0, guessedInertia); // ! find gearing
+        amperSim = new DCMotorSim(snowblowerPlant, +1.0, guessedInertia);
     }
 
     @Override
@@ -66,68 +64,62 @@ public class ShooterIOSim implements ShooterIO {
     }
 
     @Override
-    public void setAmperPercent(double percent) {
-        // TODO Auto-generated method stub
-        ShooterIO.super.setAmperPercent(percent);
-    }
-
-    @Override
-    public void setAuxBrakeMode(boolean enable) {
-        // TODO Auto-generated method stub
-        ShooterIO.super.setAuxBrakeMode(enable);
-    }
-
-    @Override
-    public void setAuxPercent(double percent) {
-        // TODO Auto-generated method stub
-        ShooterIO.super.setAuxPercent(percent);
-    }
-
-    @Override
     public void setAuxVoltage(double volts) {
-        // TODO Auto-generated method stub
-        ShooterIO.super.setAuxVoltage(volts);
-    }
-
-    @Override
-    public void setIntakeBrakeMode(boolean enable) {
-        // TODO Auto-generated method stub
-        ShooterIO.super.setIntakeBrakeMode(enable);
-    }
-
-    @Override
-    public void setIntakePercent(double percent) {
-        // TODO Auto-generated method stub
-        ShooterIO.super.setIntakePercent(percent);
-    }
-
-    @Override
-    public void setLeftPercent(double percent) {
-        // TODO Auto-generated method stub
-        ShooterIO.super.setLeftPercent(percent);
-    }
-
-    @Override
-    public void setLeftVoltage(double volts) {
-        // TODO Auto-generated method stub
-        ShooterIO.super.setLeftVoltage(volts);
-    }
-
-    @Override
-    public void setRightPercent(double percent) {
-        // TODO Auto-generated method stub
-        ShooterIO.super.setRightPercent(percent);
+        auxAppliedVolts = MathUtil.clamp(volts, -12.0, +12.0);
+        auxSim.setInputVoltage(auxAppliedVolts);
     }
 
     @Override
     public void setRightVoltage(double volts) {
-        // TODO Auto-generated method stub
-        ShooterIO.super.setRightVoltage(volts);
+        rightAppliedVolts = MathUtil.clamp(volts, -12.0, +12.0);
+        rightSim.setInputVoltage(rightAppliedVolts);
     }
 
     @Override
-    public void setSidesBrakeMode(boolean enable) {
-        // TODO Auto-generated method stub
-        ShooterIO.super.setSidesBrakeMode(enable);
+    public void setLeftVoltage(double volts) {
+        leftAppliedVolts = MathUtil.clamp(volts, -12.0, +12.0);
+        leftSim.setInputVoltage(leftAppliedVolts);
+    }
+
+    @Override
+    public void setIntakeVoltage(double volts) {
+        intakeAppliedVolts = MathUtil.clamp(volts, -12.0, +12.0);
+        intakeSim.setInputVoltage(intakeAppliedVolts);
+    }
+
+    @Override
+    public void setAmperVoltage(double volts) {
+        amperAppliedVolts = MathUtil.clamp(volts, -12.0, +12.0);
+        amperSim.setInputVoltage(amperAppliedVolts);
+    }
+
+    @Override
+    public void setIntakePercent(double percent) {
+        intakeAppliedVolts = MathUtil.clamp(percent * 12, -12.0, +12.0);
+        intakeSim.setInputVoltage(intakeAppliedVolts);
+    }
+
+    @Override
+    public void setAmperPercent(double percent) {
+        amperAppliedVolts = MathUtil.clamp(percent * 12, -12.0, +12.0);
+        amperSim.setInputVoltage(amperAppliedVolts);
+    }
+
+    @Override
+    public void setAuxPercent(double percent) {
+        auxAppliedVolts = MathUtil.clamp(percent * 12, -12.0, +12.0);
+        auxSim.setInputVoltage(auxAppliedVolts);
+    }
+
+    @Override
+    public void setLeftPercent(double percent) {
+        leftAppliedVolts = MathUtil.clamp(percent * 12, -12.0, +12.0);
+        leftSim.setInputVoltage(leftAppliedVolts);
+    }
+
+    @Override
+    public void setRightPercent(double percent) {
+        rightAppliedVolts = MathUtil.clamp(percent * 12, -12.0, +12.0);
+        rightSim.setInputVoltage(rightAppliedVolts);
     }
 }

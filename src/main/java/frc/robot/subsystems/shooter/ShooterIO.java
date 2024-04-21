@@ -53,15 +53,12 @@ public interface ShooterIO {
     /** Run the intake motor at the specified percentage. */
     public default void setIntakePercent(double percent) {}
 
+    /** Run the intake motor at the specified voltage. */
+    public default void setAmperVoltage(double volts) {}
+
     /** Run the amper motor at the specified percentage. */
     public default void setAmperPercent(double percent) {}
 
-    /** Enable or disable brake mode on BOTH of the side motors. */
-    public default void setSidesBrakeMode(boolean enable) {}
-
-    /** Enable or disable brake mode on the aux motor. */
-    public default void setAuxBrakeMode(boolean enable) {}
-
-    /** Enable or disable brake mode on the intake motors. */
-    public default void setIntakeBrakeMode(boolean enable) {}
+    /** Run the intake motor at the specified voltage. */
+    public default void setIntakeVoltage(double volts) {}
 }

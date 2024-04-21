@@ -102,11 +102,6 @@ public class ShooterIOSparkMax implements ShooterIO {
     }
 
     @Override
-    public void setAuxBrakeMode(boolean enable) {
-        auxMotor.setIdleMode(boolToIdleMode(enable));
-    }
-
-    @Override
     public void setAuxPercent(double percent) {
         auxMotor.set(percent);
     }
@@ -114,11 +109,6 @@ public class ShooterIOSparkMax implements ShooterIO {
     @Override
     public void setAuxVoltage(double volts) {
         auxMotor.setVoltage(volts);
-    }
-
-    @Override
-    public void setIntakeBrakeMode(boolean enable) {
-        intakeMotor.setIdleMode(boolToIdleMode(enable));
     }
 
     @Override
@@ -147,13 +137,12 @@ public class ShooterIOSparkMax implements ShooterIO {
     }
 
     @Override
-    public void setSidesBrakeMode(boolean enable) {
-        IdleMode mode = boolToIdleMode(enable);
-        leftMotor.setIdleMode(mode);
-        rightMotor.setIdleMode(mode);
+    public void setAmperVoltage(double volts) {
+        amperMotor.setVoltage(volts);
     }
 
-    private static IdleMode boolToIdleMode(boolean enabled) {
-        return enabled ? IdleMode.kBrake : IdleMode.kCoast;
+    @Override
+    public void setIntakeVoltage(double volts) {
+        intakeMotor.setVoltage(volts);
     }
 }

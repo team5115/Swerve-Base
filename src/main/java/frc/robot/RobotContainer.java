@@ -32,6 +32,7 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSparkMax;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
+import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -72,7 +73,7 @@ public class RobotContainer {
             case SIM:
                 // Sim robot, instantiate physics sim IO implementations
                 gyro = new GyroIO() {};
-                shooter = new Shooter(new ShooterIO() {}); // TODO make a sim class for the shooter
+                shooter = new Shooter(new ShooterIOSim());
                 drivetrain =
                         new Drivetrain(
                                 gyro, new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim());
@@ -125,8 +126,8 @@ public class RobotContainer {
 
         // joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
         joyDrive.start().onTrue(resetFieldOrientation());
-        joyDrive.back().onTrue(shooter.vomit()).onFalse(shooter.stop());
 
+        joyDrive.back().onTrue(shooter.vomit()).onFalse(shooter.stop());
         joyDrive.a().onTrue(DriveCommands.intakeUntilNote(shooter));
         joyDrive
                 .b()

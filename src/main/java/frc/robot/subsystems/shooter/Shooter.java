@@ -45,10 +45,6 @@ public class Shooter extends SubsystemBase {
         }
 
         auxPID.setTolerance(20);
-
-        io.setSidesBrakeMode(false);
-        io.setAuxBrakeMode(false);
-        io.setIntakeBrakeMode(true);
     }
 
     public void periodic() {
@@ -116,15 +112,17 @@ public class Shooter extends SubsystemBase {
                         inputs.amperPosition.plus(offset2d).getDegrees() - offset,
                         setpoint.plus(offset2d).getDegrees() - offset);
         io.setAmperPercent(pidOutput);
+        Logger.recordOutput("Shooter/AmperPidPercent", pidOutput);
         return pidOutput;
     }
 
     public double spinAuxByPid(double rpm) {
         final double rps = rpm / 60;
         final double feedforward = auxFF.calculate(rps);
-        final double feedback = auxPID.calculate(0, rps);
+        final double feedback = auxPID.calculate(0, rps); // ! This currently isn't an actual PID loop
         final double volts = feedforward + feedback;
         io.setAuxVoltage(volts);
+        Logger.recordOutput("Shooter/AuxSpinUpVolts", volts);
         return volts;
     }
 
