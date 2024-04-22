@@ -11,6 +11,7 @@ public class SpinUpShooter extends Command {
     private boolean atSpeed;
 
     public SpinUpShooter(Shooter shooter, double rpm, boolean neverExit) {
+        addRequirements(shooter);
         this.shooter = shooter;
         this.rpm = rpm;
         this.neverExit = neverExit;

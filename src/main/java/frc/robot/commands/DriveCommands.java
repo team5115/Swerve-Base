@@ -37,7 +37,7 @@ public class DriveCommands {
                         // TODO deploy arm
                         shooter.intake(),
                         shooter.centerNote(),
-                        shooter.waitForDetectionState(true),
+                        shooter.waitForDetectionState(true, 20),
                         shooter.stopIntake(),
                         shooter.stopSides())
                 .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
@@ -61,16 +61,15 @@ public class DriveCommands {
                         shooter.setIntakeSpeed(-0.9),
                         shooter.setSideSpeeds(-1),
                         shooter.setAuxSpeed(-1),
-                        shooter.waitForDetectionState(true).withTimeout(1),
-                        shooter.waitForDetectionState(false).withTimeout(1),
+                        shooter.waitForDetectionState(true, 1),
+                        shooter.waitForDetectionState(false, 1),
                         Commands.waitSeconds(0.22),
                         shooter.stopIntake(),
                         shooter.stopSides(),
                         shooter.stopAux(),
                         Commands.waitSeconds(0.5),
-                        Commands.parallel(
-                                        // TODO stow arm
-                                        new SpinAmper(shooter, Shooter.AMPER_IN_ANGLE))
+                        new SpinAmper(shooter, Shooter.AMPER_IN_ANGLE)
+                                .alongWith(stowArm(shooter))
                                 .withTimeout(5))
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
@@ -78,6 +77,7 @@ public class DriveCommands {
     public static Command prepareShoot(Shooter shooter, double angle, boolean neverExit) {
         return Commands.parallel(
                         // TODO deploy arm
+                        shooter.stop(), // we use this one because it doesn't require shooter subsystem
                         new SpinUpShooter(shooter, 5000, neverExit))
                 .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
@@ -90,6 +90,13 @@ public class DriveCommands {
                         shooter.stopSides(),
                         shooter.stopAux())
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    }
+
+    public static Command stowArm(Shooter shooter) {
+        return Commands.sequence(
+                shooter.stopIntake(), shooter.stopSides(), shooter.stopAux()
+                // TODO stow arm
+                );
     }
 
     /**

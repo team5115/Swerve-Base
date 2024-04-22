@@ -11,6 +11,7 @@ public class SpinAmper extends Command {
     private double pid;
 
     public SpinAmper(Shooter shooter, Rotation2d setpoint) {
+        // addRequirements(shooter);
         this.shooter = shooter;
         this.setpoint = setpoint;
         pid_tolerance = 0.05;

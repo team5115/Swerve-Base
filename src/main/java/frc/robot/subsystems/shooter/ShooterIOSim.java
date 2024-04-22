@@ -23,7 +23,7 @@ public class ShooterIOSim implements ShooterIO {
 
     public ShooterIOSim() {
         final DCMotor snowblowerPlant = new DCMotor(+12.0, +7.909, +24.0, +5.0, +10.472, +1);
-        // TODO find moments of inertia and 2 more gearings
+        // TODO find moments of inertia
         final double guessedInertia = 0.00080645;
         leftSim = new FlywheelSim(DCMotor.getNEO(+1), +1.0, guessedInertia);
         rightSim = new FlywheelSim(DCMotor.getNEO(+1), +1.0, guessedInertia);

@@ -16,8 +16,8 @@ public class Shooter extends SubsystemBase {
 
     private final ShooterIO io;
     private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
-    // This feedforward is in RPS so we convert the desired RPM to RPS when we run the .calculate()
-    // method
+    // This feedforward is in RPS so we convert the desired RPM to RPS
+    // when we run the .calculate() method
     private final SimpleMotorFeedforward auxFF;
     private final PIDController auxPID;
     private final PIDController amperPID;
@@ -56,8 +56,8 @@ public class Shooter extends SubsystemBase {
         io.setAmperPercent(percent);
     }
 
-    public Command waitForDetectionState(boolean state) {
-        return Commands.waitUntil(() -> inputs.noteDetected == state);
+    public Command waitForDetectionState(boolean state, double timeout) {
+        return Commands.waitUntil(() -> inputs.noteDetected == state).withTimeout(timeout);
     }
 
     public Command intake() {
@@ -73,15 +73,19 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command stopSides() {
-        return setSideSpeeds(0);
+        return setSideSpeeds(+0);
     }
 
     public Command stopAux() {
-        return setAuxSpeed(0);
+        return setAuxSpeed(+0);
     }
 
     public Command centerNote() {
-        return setSideSpeeds(0.08);
+        return setSideSpeeds(+0.08);
+    }
+
+    public Command setSideSpeeds(double percent) {
+        return setSideSpeeds(percent, percent);
     }
 
     public Command setAuxSpeed(double percent) {
@@ -92,11 +96,11 @@ public class Shooter extends SubsystemBase {
         return Commands.runOnce(() -> io.setIntakePercent(percent), this);
     }
 
-    public Command setSideSpeeds(double percent) {
+    public Command setSideSpeeds(double leftPercent, double rightPercent) {
         return Commands.runOnce(
                 () -> {
-                    io.setLeftPercent(percent);
-                    io.setRightPercent(percent);
+                    io.setLeftPercent(leftPercent);
+                    io.setRightPercent(rightPercent);
                 },
                 this);
     }
@@ -117,12 +121,12 @@ public class Shooter extends SubsystemBase {
     }
 
     public double spinAuxByPid(double rpm) {
-        final double rps = rpm / 60;
-        final double feedforward = auxFF.calculate(rps);
-        final double feedback = auxPID.calculate(0, rps); // ! This currently isn't an actual PID loop
+        final double setpointRPS = rpm / 60.0;
+        final double measuredRPS = inputs.auxVelocityRPM / 60.0;
+        final double feedforward = auxFF.calculate(setpointRPS);
+        final double feedback = auxPID.calculate(measuredRPS, setpointRPS);
         final double volts = feedforward + feedback;
         io.setAuxVoltage(volts);
-        Logger.recordOutput("Shooter/AuxSpinUpVolts", volts);
         return volts;
     }
 

@@ -129,6 +129,7 @@ public class RobotContainer {
 
         joyDrive.back().onTrue(shooter.vomit()).onFalse(shooter.stop());
         joyDrive.a().onTrue(DriveCommands.intakeUntilNote(shooter));
+        joyDrive.y().onTrue(DriveCommands.stowArm(shooter));
         joyDrive
                 .b()
                 .onTrue(DriveCommands.prepareShoot(shooter, 15, true))
