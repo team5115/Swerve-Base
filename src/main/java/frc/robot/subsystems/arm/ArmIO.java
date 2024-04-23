@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drive.arm;
+package frc.robot.subsystems.arm;
 
 import org.littletonrobotics.junction.AutoLog;
 
@@ -7,8 +7,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 public interface ArmIO {
     @AutoLog
     public static class ArmIOInputs{
-        public Rotation2d angle = new Rotation2d();
-        public double velocityRadPerMin = 0;
+        public Rotation2d armAngle = new Rotation2d();
+        public double armVelocityRadPerMin = 0;
         public double armCurrentAmps = 0;
         public double armAppliedVolts = 0;
     }
