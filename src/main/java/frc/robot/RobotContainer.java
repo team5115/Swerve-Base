@@ -97,6 +97,7 @@ public class RobotContainer {
         }
 
         // Register auto commands for pathplanner
+        AutoCommands.registerCommands(drivetrain);
         AutoCommands.registerCommands(drivetrain, shooter, arm);
         // Set up auto routines
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -127,9 +128,9 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
                 DriveCommands.joystickDrive(
                         drivetrain,
-                        () -> -joyDrive.getLeftY(),
+                        () -> joyDrive.getLeftY(),
                         () -> -joyDrive.getLeftX(),
-                        () -> -joyDrive.getRightX()));
+                        () -> joyDrive.getRightX()));
 
         // joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
         joyDrive.start().onTrue(resetFieldOrientation());
@@ -154,6 +155,7 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return autoChooser.get();
+        // return null;
     }
 
     private Command resetFieldOrientation() {

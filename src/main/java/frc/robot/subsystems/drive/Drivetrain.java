@@ -272,10 +272,10 @@ public class Drivetrain extends SubsystemBase {
     /** Returns an array of module translations. */
     public static Translation2d[] getModuleTranslations() {
         return new Translation2d[] {
-            new Translation2d(SwerveConstants.TRACK_WIDTH_X / 2.0, SwerveConstants.TRACK_WIDTH_Y / 2.0),
             new Translation2d(SwerveConstants.TRACK_WIDTH_X / 2.0, SwerveConstants.TRACK_WIDTH_Y / -2.0),
-            new Translation2d(SwerveConstants.TRACK_WIDTH_X / -2.0, SwerveConstants.TRACK_WIDTH_Y / 2.0),
-            new Translation2d(SwerveConstants.TRACK_WIDTH_X / -2.0, SwerveConstants.TRACK_WIDTH_Y / -2.0)
+            new Translation2d(SwerveConstants.TRACK_WIDTH_X / 2.0, SwerveConstants.TRACK_WIDTH_Y / 2.0),
+            new Translation2d(SwerveConstants.TRACK_WIDTH_X / -2.0, SwerveConstants.TRACK_WIDTH_Y / -2.0),
+            new Translation2d(SwerveConstants.TRACK_WIDTH_X / -2.0, SwerveConstants.TRACK_WIDTH_Y / 2.0)
         };
     }
 }
