@@ -24,6 +24,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AutoCommands;
 import frc.robot.commands.DriveCommands;
+import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.ArmIO;
+import frc.robot.subsystems.arm.ArmIOSparkMax;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavx;
@@ -47,6 +50,7 @@ public class RobotContainer {
     private final GyroIO gyro;
     private final Drivetrain drivetrain;
     private final Shooter shooter;
+    private final Arm arm;
 
     // Controller
     private final CommandXboxController joyDrive = new CommandXboxController(0);
@@ -61,6 +65,7 @@ public class RobotContainer {
                 // Real robot, instantiate hardware IO implementations
                 gyro = new GyroIONavx();
                 shooter = new Shooter(new ShooterIOSparkMax());
+                arm = new Arm(new ArmIOSparkMax());
                 drivetrain =
                         new Drivetrain(
                                 gyro,
@@ -74,6 +79,7 @@ public class RobotContainer {
                 // Sim robot, instantiate physics sim IO implementations
                 gyro = new GyroIO() {};
                 shooter = new Shooter(new ShooterIOSim());
+                arm = new Arm(new ArmIO() {}); // TODO create armio sim
                 drivetrain =
                         new Drivetrain(
                                 gyro, new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim());
@@ -83,6 +89,7 @@ public class RobotContainer {
                 // Replayed robot, disable IO implementations
                 gyro = new GyroIO() {};
                 shooter = new Shooter(new ShooterIO() {});
+                arm = new Arm(new ArmIO() {});
                 drivetrain =
                         new Drivetrain(
                                 gyro, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
@@ -90,7 +97,7 @@ public class RobotContainer {
         }
 
         // Register auto commands for pathplanner
-        AutoCommands.registerCommands(drivetrain, shooter);
+        AutoCommands.registerCommands(drivetrain, shooter, arm);
         // Set up auto routines
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
@@ -128,16 +135,16 @@ public class RobotContainer {
         joyDrive.start().onTrue(resetFieldOrientation());
 
         joyDrive.back().onTrue(shooter.vomit()).onFalse(shooter.stop());
-        joyDrive.a().onTrue(DriveCommands.intakeUntilNote(shooter));
-        joyDrive.y().onTrue(DriveCommands.stowArm(shooter));
+        joyDrive.a().onTrue(DriveCommands.intakeUntilNote(shooter, arm));
+        joyDrive.y().onTrue(DriveCommands.stowArm(shooter, arm));
         joyDrive
                 .b()
-                .onTrue(DriveCommands.prepareShoot(shooter, 15, true))
+                .onTrue(DriveCommands.prepareShoot(shooter, arm, 15, true))
                 .onFalse(DriveCommands.triggerShoot(shooter));
         joyDrive
                 .x()
                 .onTrue(DriveCommands.prepareAmp(shooter))
-                .onFalse(DriveCommands.triggerAmp(shooter));
+                .onFalse(DriveCommands.triggerAmp(shooter, arm));
     }
 
     /**

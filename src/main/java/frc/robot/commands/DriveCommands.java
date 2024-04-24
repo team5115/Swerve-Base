@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drive.Drivetrain;
 import frc.robot.subsystems.shooter.Shooter;
 import java.util.function.DoubleSupplier;
@@ -32,7 +33,7 @@ public class DriveCommands {
 
     private DriveCommands() {}
 
-    public static Command intakeUntilNote(Shooter shooter) {
+    public static Command intakeUntilNote(Shooter shooter, Arm arm) {
         return Commands.sequence(
                         // TODO deploy arm
                         shooter.intake(),
@@ -56,7 +57,7 @@ public class DriveCommands {
                 .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
-    public static Command triggerAmp(Shooter shooter) {
+    public static Command triggerAmp(Shooter shooter, Arm arm) {
         return Commands.sequence(
                         shooter.setIntakeSpeed(-0.9),
                         shooter.setSideSpeeds(-1),
@@ -69,12 +70,12 @@ public class DriveCommands {
                         shooter.stopAux(),
                         Commands.waitSeconds(0.5),
                         new SpinAmper(shooter, Shooter.AMPER_IN_ANGLE)
-                                .alongWith(stowArm(shooter))
+                                .alongWith(stowArm(shooter, arm))
                                 .withTimeout(5))
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
 
-    public static Command prepareShoot(Shooter shooter, double angle, boolean neverExit) {
+    public static Command prepareShoot(Shooter shooter, Arm arm, double angle, boolean neverExit) {
         return Commands.parallel(
                         // TODO deploy arm
                         shooter.stop(), // we use this one because it doesn't require shooter subsystem
@@ -92,7 +93,7 @@ public class DriveCommands {
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
 
-    public static Command stowArm(Shooter shooter) {
+    public static Command stowArm(Shooter shooter, Arm arm) {
         return Commands.sequence(
                 shooter.stopIntake(), shooter.stopSides(), shooter.stopAux()
                 // TODO stow arm
