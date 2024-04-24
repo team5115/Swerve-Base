@@ -8,7 +8,7 @@ public interface ArmIO {
     @AutoLog
     public static class ArmIOInputs{
         public Rotation2d armAngle = new Rotation2d();
-        public double armVelocityRadPerMin = 0;
+        public double armVelocityRPM = 0;
         public double armCurrentAmps = 0;
         public double armAppliedVolts = 0;
     }
