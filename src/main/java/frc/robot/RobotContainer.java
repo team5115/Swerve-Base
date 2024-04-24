@@ -112,9 +112,9 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
                 DriveCommands.joystickDrive(
                         drivetrain,
-                        () -> -joyDrive.getLeftY(),
+                        () -> joyDrive.getLeftY(),
                         () -> -joyDrive.getLeftX(),
-                        () -> -joyDrive.getRightX()));
+                        () -> joyDrive.getRightX()));
 
         joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
         joyDrive.b().onTrue(resetFieldOrientation());
