@@ -20,15 +20,85 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drive.Drivetrain;
+import frc.robot.subsystems.shooter.Shooter;
 import java.util.function.DoubleSupplier;
 
 public class DriveCommands {
     private static final double DEADBAND = 0.1;
 
     private DriveCommands() {}
+
+    public static Command intakeUntilNote(Shooter shooter, Arm arm) {
+        return Commands.sequence(
+                        // TODO deploy arm
+                        shooter.intake(),
+                        shooter.centerNote(),
+                        shooter.waitForDetectionState(true, 20),
+                        shooter.stopIntake(),
+                        shooter.stopSides())
+                .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
+    }
+
+    public static Command prepareAmp(Shooter shooter) {
+        return Commands.sequence(
+                        // TODO deploy arm
+                        new SpinAmper(shooter, Shooter.AMPER_OUT_ANGLE).withTimeout(5),
+                        shooter.setIntakeSpeed(1),
+                        shooter.setSideSpeeds(0.25),
+                        shooter.stopAux(),
+                        Commands.waitSeconds(0.8),
+                        shooter.stopSides(),
+                        shooter.setIntakeSpeed(-0.9))
+                .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
+    }
+
+    public static Command triggerAmp(Shooter shooter, Arm arm) {
+        return Commands.sequence(
+                        shooter.setIntakeSpeed(-0.9),
+                        shooter.setSideSpeeds(-1),
+                        shooter.setAuxSpeed(-1),
+                        shooter.waitForDetectionState(true, 1),
+                        shooter.waitForDetectionState(false, 1),
+                        Commands.waitSeconds(0.22),
+                        shooter.stopIntake(),
+                        shooter.stopSides(),
+                        shooter.stopAux(),
+                        Commands.waitSeconds(0.5),
+                        new SpinAmper(shooter, Shooter.AMPER_IN_ANGLE)
+                                .alongWith(stowArm(shooter, arm))
+                                .withTimeout(5))
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    }
+
+    public static Command prepareShoot(Shooter shooter, Arm arm, double angle, boolean neverExit) {
+        return Commands.parallel(
+                        // TODO deploy arm
+                        shooter.stop(), // we use this one because it doesn't require shooter subsystem
+                        new SpinUpShooter(shooter, 5000, neverExit))
+                .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
+    }
+
+    public static Command triggerShoot(Shooter shooter) {
+        return Commands.sequence(
+                        shooter.setSideSpeeds(+1),
+                        Commands.waitSeconds(0.5),
+                        shooter.stopIntake(),
+                        shooter.stopSides(),
+                        shooter.stopAux())
+                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    }
+
+    public static Command stowArm(Shooter shooter, Arm arm) {
+        return Commands.sequence(
+                shooter.stopIntake(), shooter.stopSides(), shooter.stopAux()
+                // TODO stow arm
+                );
+    }
 
     /**
      * Field relative drive command using two joysticks (controlling linear and angular velocities).
