@@ -97,7 +97,6 @@ public class RobotContainer {
         }
 
         // Register auto commands for pathplanner
-        AutoCommands.registerCommands(drivetrain);
         AutoCommands.registerCommands(drivetrain, shooter, arm);
         // Set up auto routines
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -155,7 +154,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return autoChooser.get();
-        // return null;
     }
 
     private Command resetFieldOrientation() {

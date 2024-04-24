@@ -40,17 +40,11 @@ public class Arm extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("Arm", inputs);
-        final double pidOutput = armPID.calculate(getAngle().getDegrees(), setpoint.getDegrees());
-        setTurn(pidOutput, setpoint);
-    }
 
-    public void setTurn(double speed, Rotation2d setpoint) {
-        if (speed != speed) {
-            speed = 0;
-        }
-        double adjustedRads = getAngle().getRadians(); // + Math.toRadians(30);
-        double voltage = MathUtil.clamp(armFF.calculate(adjustedRads, speed), -10, 10);
-        // double voltage = MathUtil.clamp(ff.calculate(setpoint.getRadians(-Math.PI), speed), -10, 10);
+        // Update the pids and feedforward
+        final double speed = armPID.calculate(inputs.armAngle.getDegrees(), setpoint.getDegrees());
+        double voltage = armFF.calculate(inputs.armAngle.getRadians(), speed);
+        voltage = MathUtil.clamp(voltage, -10, +10);
 
         if (Math.abs(voltage) < 2 * armFF.ks) {
             voltage = 0;
@@ -61,13 +55,5 @@ public class Arm extends SubsystemBase {
 
     public void stop() {
         io.setArmVoltage(0);
-    }
-
-    public Rotation2d getAngle() {
-        return inputs.armAngle;
-    }
-
-    public double getCurrentAmps() {
-        return inputs.armCurrentAmps;
     }
 }

@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.Constants;
 
 public class ArmIOSparkMax implements ArmIO {
     private final CANSparkMax leftMotor;
@@ -12,8 +13,8 @@ public class ArmIOSparkMax implements ArmIO {
     private final AbsoluteEncoder absoluteEncoder;
 
     public ArmIOSparkMax() {
-        leftMotor = new CANSparkMax(0, MotorType.kBrushless);
-        rightMotor = new CANSparkMax(0, MotorType.kBrushless);
+        leftMotor = new CANSparkMax(Constants.ARM_LEFT_MOTOR_ID, MotorType.kBrushless);
+        rightMotor = new CANSparkMax(Constants.ARM_RIGHT_MOTOR_ID, MotorType.kBrushless);
         absoluteEncoder = leftMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
     }
 
