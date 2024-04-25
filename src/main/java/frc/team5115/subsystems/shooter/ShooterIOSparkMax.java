@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import frc.team5115.Constants;
 
 public class ShooterIOSparkMax implements ShooterIO {
-
     private final CANSparkMax leftMotor;
     private final CANSparkMax rightMotor;
     private final CANSparkMax intakeMotor;

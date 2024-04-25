@@ -10,10 +10,6 @@ import frc.team5115.Constants;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
-
-    public static final Rotation2d AMPER_IN_ANGLE = Rotation2d.fromDegrees(0);
-    public static final Rotation2d AMPER_OUT_ANGLE = Rotation2d.fromDegrees(178);
-
     private final ShooterIO io;
     private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
     // This feedforward is in RPS so we convert the desired RPM to RPS

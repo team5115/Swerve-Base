@@ -48,7 +48,7 @@ public class DriveCommands {
     public static Command prepareAmp(Shooter shooter, Arm arm) {
         return Commands.sequence(
                         arm.goToAngle(Rotation2d.fromDegrees(103.5)),
-                        new SpinAmper(shooter, Shooter.AMPER_OUT_ANGLE).withTimeout(5),
+                        new SpinAmper(shooter, Rotation2d.fromDegrees(178)).withTimeout(5),
                         shooter.setIntakeSpeed(1),
                         shooter.setSideSpeeds(0.25),
                         shooter.stopAux(),
@@ -70,7 +70,7 @@ public class DriveCommands {
                         shooter.stopSides(),
                         shooter.stopAux(),
                         Commands.waitSeconds(0.5),
-                        new SpinAmper(shooter, Shooter.AMPER_IN_ANGLE)
+                        new SpinAmper(shooter, Rotation2d.fromDegrees(0))
                                 .alongWith(stowArm(shooter, arm))
                                 .withTimeout(5))
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);

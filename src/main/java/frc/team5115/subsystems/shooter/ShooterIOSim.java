@@ -5,10 +5,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import frc.team5115.Constants;
 
 public class ShooterIOSim implements ShooterIO {
-    private static final double LOOP_PERIOD_SECS = 0.02;
-
     private final FlywheelSim leftSim;
     private final FlywheelSim rightSim;
     private final FlywheelSim auxSim;
@@ -22,23 +21,20 @@ public class ShooterIOSim implements ShooterIO {
     private double amperAppliedVolts;
 
     public ShooterIOSim() {
-        final DCMotor snowblowerPlant = new DCMotor(+12.0, +7.909, +24.0, +5.0, +10.472, +1);
-        // TODO find moments of inertia
-        final double guessedInertia = 0.00080645;
-        leftSim = new FlywheelSim(DCMotor.getNEO(+1), +1.0, guessedInertia);
-        rightSim = new FlywheelSim(DCMotor.getNEO(+1), +1.0, guessedInertia);
-        auxSim = new FlywheelSim(DCMotor.getNEO(+1), +1.0, guessedInertia);
-        intakeSim = new DCMotorSim(DCMotor.getNEO(+1), +1.0, guessedInertia);
-        amperSim = new DCMotorSim(snowblowerPlant, +1.0, guessedInertia);
+        leftSim = new FlywheelSim(DCMotor.getNEO(1), 1.0, 0.0002);
+        rightSim = new FlywheelSim(DCMotor.getNEO(1), 1.0, 0.0002);
+        auxSim = new FlywheelSim(DCMotor.getNEO(1), 1.0, 0.0002);
+        intakeSim = new DCMotorSim(DCMotor.getNEO(1), 1.0, 0.0002);
+        amperSim = new DCMotorSim(new DCMotor(+12.0, +7.909, +24.0, +5.0, +10.472, +1), +1.0, 0.0002);
     }
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
-        leftSim.update(LOOP_PERIOD_SECS);
-        rightSim.update(LOOP_PERIOD_SECS);
-        auxSim.update(LOOP_PERIOD_SECS);
-        intakeSim.update(LOOP_PERIOD_SECS);
-        amperSim.update(LOOP_PERIOD_SECS);
+        leftSim.update(Constants.LOOP_PERIOD_SECS);
+        rightSim.update(Constants.LOOP_PERIOD_SECS);
+        auxSim.update(Constants.LOOP_PERIOD_SECS);
+        intakeSim.update(Constants.LOOP_PERIOD_SECS);
+        amperSim.update(Constants.LOOP_PERIOD_SECS);
 
         inputs.leftVelocityRPM = leftSim.getAngularVelocityRPM();
         inputs.leftAppliedVolts = leftAppliedVolts;
