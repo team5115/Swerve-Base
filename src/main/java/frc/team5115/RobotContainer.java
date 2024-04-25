@@ -26,6 +26,7 @@ import frc.team5115.commands.AutoCommands;
 import frc.team5115.commands.DriveCommands;
 import frc.team5115.subsystems.arm.Arm;
 import frc.team5115.subsystems.arm.ArmIO;
+import frc.team5115.subsystems.arm.ArmIOSim;
 import frc.team5115.subsystems.arm.ArmIOSparkMax;
 import frc.team5115.subsystems.drive.Drivetrain;
 import frc.team5115.subsystems.drive.GyroIO;
@@ -37,7 +38,6 @@ import frc.team5115.subsystems.shooter.Shooter;
 import frc.team5115.subsystems.shooter.ShooterIO;
 import frc.team5115.subsystems.shooter.ShooterIOSim;
 import frc.team5115.subsystems.shooter.ShooterIOSparkMax;
-
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -80,7 +80,7 @@ public class RobotContainer {
                 // Sim robot, instantiate physics sim IO implementations
                 gyro = new GyroIO() {};
                 shooter = new Shooter(new ShooterIOSim());
-                arm = new Arm(new ArmIO() {}); // TODO create armio sim
+                arm = new Arm(new ArmIOSim());
                 drivetrain =
                         new Drivetrain(
                                 gyro, new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim());
