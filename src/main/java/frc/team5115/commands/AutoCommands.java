@@ -1,9 +1,9 @@
-package frc.robot.commands;
+package frc.team5115.commands;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.drive.Drivetrain;
+import frc.team5115.subsystems.drive.Drivetrain;
 
 public class AutoCommands {
     private AutoCommands() {}
