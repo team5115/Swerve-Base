@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot;
+package frc.team5115;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -22,21 +22,22 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.commands.AutoCommands;
-import frc.robot.commands.DriveCommands;
-import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.arm.ArmIO;
-import frc.robot.subsystems.arm.ArmIOSparkMax;
-import frc.robot.subsystems.drive.Drivetrain;
-import frc.robot.subsystems.drive.GyroIO;
-import frc.robot.subsystems.drive.GyroIONavx;
-import frc.robot.subsystems.drive.ModuleIO;
-import frc.robot.subsystems.drive.ModuleIOSim;
-import frc.robot.subsystems.drive.ModuleIOSparkMax;
-import frc.robot.subsystems.shooter.Shooter;
-import frc.robot.subsystems.shooter.ShooterIO;
-import frc.robot.subsystems.shooter.ShooterIOSim;
-import frc.robot.subsystems.shooter.ShooterIOSparkMax;
+import frc.team5115.commands.AutoCommands;
+import frc.team5115.commands.DriveCommands;
+import frc.team5115.subsystems.arm.Arm;
+import frc.team5115.subsystems.arm.ArmIO;
+import frc.team5115.subsystems.arm.ArmIOSparkMax;
+import frc.team5115.subsystems.drive.Drivetrain;
+import frc.team5115.subsystems.drive.GyroIO;
+import frc.team5115.subsystems.drive.GyroIONavx;
+import frc.team5115.subsystems.drive.ModuleIO;
+import frc.team5115.subsystems.drive.ModuleIOSim;
+import frc.team5115.subsystems.drive.ModuleIOSparkMax;
+import frc.team5115.subsystems.shooter.Shooter;
+import frc.team5115.subsystems.shooter.ShooterIO;
+import frc.team5115.subsystems.shooter.ShooterIOSim;
+import frc.team5115.subsystems.shooter.ShooterIOSparkMax;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**

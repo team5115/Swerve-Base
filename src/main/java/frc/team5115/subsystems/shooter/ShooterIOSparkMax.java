@@ -1,4 +1,4 @@
-package frc.robot.subsystems.shooter;
+package frc.team5115.subsystems.shooter;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -8,7 +8,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
-import frc.robot.Constants;
+import frc.team5115.Constants;
 
 public class ShooterIOSparkMax implements ShooterIO {
 

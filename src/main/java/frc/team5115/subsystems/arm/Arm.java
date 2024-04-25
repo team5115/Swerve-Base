@@ -1,11 +1,13 @@
-package frc.robot.subsystems.arm;
+package frc.team5115.subsystems.arm;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.subsystems.arm.ArmIOInputsAutoLogged;
+import frc.team5115.Constants;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {

@@ -1,11 +1,11 @@
-package frc.robot.subsystems.arm;
+package frc.team5115.subsystems.arm;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.Constants;
+import frc.team5115.Constants;
 
 public class ArmIOSparkMax implements ArmIO {
     private final CANSparkMax leftMotor;

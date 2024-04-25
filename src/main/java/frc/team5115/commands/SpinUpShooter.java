@@ -1,7 +1,7 @@
-package frc.robot.commands;
+package frc.team5115.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.shooter.Shooter;
+import frc.team5115.subsystems.shooter.Shooter;
 
 public class SpinUpShooter extends Command {
     private final Shooter shooter;

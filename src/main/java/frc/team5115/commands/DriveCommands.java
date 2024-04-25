@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot.commands;
+package frc.team5115.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -21,11 +21,12 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
+import frc.team5115.Constants.SwerveConstants;
+import frc.team5115.subsystems.arm.Arm;
+import frc.team5115.subsystems.drive.Drivetrain;
+import frc.team5115.subsystems.shooter.Shooter;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.Constants.SwerveConstants;
-import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.drive.Drivetrain;
-import frc.robot.subsystems.shooter.Shooter;
+
 import java.util.function.DoubleSupplier;
 
 public class DriveCommands {

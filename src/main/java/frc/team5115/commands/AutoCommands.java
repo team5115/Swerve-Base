@@ -1,9 +1,10 @@
-package frc.robot.commands;
+package frc.team5115.commands;
 
 import com.pathplanner.lib.auto.NamedCommands;
-import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.drive.Drivetrain;
-import frc.robot.subsystems.shooter.Shooter;
+
+import frc.team5115.subsystems.arm.Arm;
+import frc.team5115.subsystems.drive.Drivetrain;
+import frc.team5115.subsystems.shooter.Shooter;
 
 public class AutoCommands {
     private AutoCommands() {}
