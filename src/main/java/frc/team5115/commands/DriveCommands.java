@@ -35,18 +35,19 @@ public class DriveCommands {
 
     public static Command intakeUntilNote(Shooter shooter, Arm arm) {
         return Commands.sequence(
-                        // TODO deploy arm
+                        arm.goToAngle(Rotation2d.fromDegrees(0)),
                         shooter.intake(),
                         shooter.centerNote(),
                         shooter.waitForDetectionState(true, 20),
+                        Commands.waitSeconds(0.25),
                         shooter.stopIntake(),
                         shooter.stopSides())
                 .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
-    public static Command prepareAmp(Shooter shooter) {
+    public static Command prepareAmp(Shooter shooter, Arm arm) {
         return Commands.sequence(
-                        // TODO deploy arm
+                        arm.goToAngle(Rotation2d.fromDegrees(103.5)),
                         new SpinAmper(shooter, Shooter.AMPER_OUT_ANGLE).withTimeout(5),
                         shooter.setIntakeSpeed(1),
                         shooter.setSideSpeeds(0.25),
@@ -77,7 +78,7 @@ public class DriveCommands {
 
     public static Command prepareShoot(Shooter shooter, Arm arm, double angle, boolean neverExit) {
         return Commands.parallel(
-                        // TODO deploy arm
+                        arm.goToAngle(Rotation2d.fromDegrees(angle)),
                         shooter.stop(), // we use this one because it doesn't require shooter subsystem
                         new SpinUpShooter(shooter, 5000, neverExit))
                 .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
@@ -95,9 +96,10 @@ public class DriveCommands {
 
     public static Command stowArm(Shooter shooter, Arm arm) {
         return Commands.sequence(
-                shooter.stopIntake(), shooter.stopSides(), shooter.stopAux()
-                // TODO stow arm
-                );
+                shooter.stopIntake(),
+                shooter.stopSides(),
+                shooter.stopAux(),
+                arm.goToAngle(Rotation2d.fromDegrees(75.0)));
     }
 
     /**

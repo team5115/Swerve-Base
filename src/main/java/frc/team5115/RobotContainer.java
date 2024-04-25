@@ -144,7 +144,7 @@ public class RobotContainer {
                 .onFalse(DriveCommands.triggerShoot(shooter));
         joyDrive
                 .x()
-                .onTrue(DriveCommands.prepareAmp(shooter))
+                .onTrue(DriveCommands.prepareAmp(shooter, arm))
                 .onFalse(DriveCommands.triggerAmp(shooter, arm));
     }
 

@@ -16,6 +16,9 @@ public class ArmIOSparkMax implements ArmIO {
         leftMotor = new CANSparkMax(Constants.ARM_LEFT_MOTOR_ID, MotorType.kBrushless);
         rightMotor = new CANSparkMax(Constants.ARM_RIGHT_MOTOR_ID, MotorType.kBrushless);
         absoluteEncoder = leftMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+        absoluteEncoder.setPositionConversionFactor(180);
+        leftMotor.setInverted(true);
+        rightMotor.setInverted(false);
     }
 
     @Override
@@ -26,8 +29,8 @@ public class ArmIOSparkMax implements ArmIO {
 
     @Override
     public void updateInputs(ArmIOInputs inputs) {
-        inputs.armVelocityRPM = absoluteEncoder.getVelocity();
-        inputs.armAngle = Rotation2d.fromRotations(absoluteEncoder.getPosition());
+        inputs.armVelocityRPM = absoluteEncoder.getVelocity() * 60.0;
+        inputs.armAngle = Rotation2d.fromDegrees(absoluteEncoder.getPosition() - 8.40);
         inputs.armCurrentAmps = (leftMotor.getOutputCurrent() + rightMotor.getOutputCurrent()) / 2.0;
         inputs.armAppliedVolts =
                 (leftMotor.getAppliedOutput() * leftMotor.getBusVoltage()
