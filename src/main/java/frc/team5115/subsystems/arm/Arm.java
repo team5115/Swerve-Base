@@ -5,7 +5,6 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team5115.Constants;
 import org.littletonrobotics.junction.Logger;
@@ -57,12 +56,7 @@ public class Arm extends SubsystemBase {
     }
 
     public Command goToAngle(Rotation2d setAngle) {
-        return Commands.runOnce(
-                        () -> {
-                            setpoint = setAngle;
-                            armPID.setSetpoint(setpoint.getDegrees());
-                        })
-                .andThen(Commands.waitUntil(() -> armPID.atSetpoint()));
+        return null; // TODO a command that changes the setpoint and then waits until it reaches the new setpoint
     }
 
     public void stop() {

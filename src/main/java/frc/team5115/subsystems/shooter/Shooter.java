@@ -4,7 +4,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team5115.Constants;
 import org.littletonrobotics.junction.Logger;
@@ -53,7 +52,8 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command waitForDetectionState(boolean state, double timeout) {
-        return Commands.waitUntil(() -> inputs.noteDetected == state).withTimeout(timeout);
+        return null; // TODO this should return a command that waits until the sensor reaches `state`
+        // with a timeout of timeout
     }
 
     public Command intake() {
@@ -85,20 +85,15 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command setAuxSpeed(double percent) {
-        return Commands.runOnce(() -> io.setAuxPercent(percent), this);
+        return null; // TODO set aux speed
     }
 
     public Command setIntakeSpeed(double percent) {
-        return Commands.runOnce(() -> io.setIntakePercent(percent), this);
+        return null; // TODO set intake speed
     }
 
     public Command setSideSpeeds(double leftPercent, double rightPercent) {
-        return Commands.runOnce(
-                () -> {
-                    io.setLeftPercent(leftPercent);
-                    io.setRightPercent(rightPercent);
-                },
-                this);
+        return null; // TODO set both left and right speeds
     }
 
     public double spinAmper(Rotation2d setpoint) {
@@ -128,13 +123,7 @@ public class Shooter extends SubsystemBase {
 
     /** This command does NOT require the shooter subsystem so that it can override all else */
     public Command vomit() {
-        return Commands.runOnce(
-                () -> {
-                    io.setIntakePercent(-1);
-                    io.setLeftPercent(-0.9);
-                    io.setRightPercent(-0.9);
-                    io.setAuxPercent(-0.9);
-                });
+        return null; // TODO vomit -- make sure it doesn't require the shooter subsystem
     }
 
     /**
@@ -142,12 +131,6 @@ public class Shooter extends SubsystemBase {
      * command groups. It also does NOT stop the amper
      */
     public Command stop() {
-        return Commands.runOnce(
-                () -> {
-                    io.setIntakePercent(0);
-                    io.setLeftPercent(0);
-                    io.setRightPercent(0);
-                    io.setAuxPercent(0);
-                });
+        return null; // TODO stop command -- make sure it doesn't require the shooter subsystem
     }
 }
