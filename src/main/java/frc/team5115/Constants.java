@@ -38,6 +38,20 @@ public final class Constants {
         REPLAY
     }
 
+    public static final byte INTAKE_MOTOR_ID = 32;
+    public static final byte SNOWBLOWER_MOTOR_ID = 21;
+    public static final byte ARM_LEFT_MOTOR_ID = 3;
+    public static final byte ARM_RIGHT_MOTOR_ID = 33;
+    public static final byte SHOOTER_RIGHT_MOTOR_ID = 27;
+    public static final byte SHOOTER_LEFT_MOTOR_ID = 20;
+    public static final byte SHOTER_AUX_MOTOR_ID = 35;
+    public static final byte CLIMBER_LEFT_MOTOR_ID = 30;
+    public static final byte CLIMBER_RIGHT_MOTOR_ID = 31;
+
+    public static final byte SHOOTER_SENSOR_ID = 0;
+    public static final byte CLIMB_LEFT_SENSOR_ID = 8;
+    public static final byte CLIMB_RIGHT_SENSOR_ID = 9;
+  
     public static final double LOOP_PERIOD_SECS = 0.02;
 
     public static class SwerveConstants {
@@ -63,7 +77,6 @@ public final class Constants {
                 Math.hypot(TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0);
         public static final double MAX_ANGULAR_SPEED = MAX_LINEAR_SPEED / DRIVE_BASE_RADIUS;
 
-        // Calculations required for driving motor conversion factors and feed forward
         public static final double WHEEL_RADIUS_METERS = Units.inchesToMeters(1.5);
 
         // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear
