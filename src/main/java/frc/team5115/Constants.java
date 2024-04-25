@@ -13,7 +13,6 @@
 
 package frc.team5115;
 
-import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 
@@ -53,6 +52,8 @@ public final class Constants {
     public static final byte CLIMB_LEFT_SENSOR_ID = 8;
     public static final byte CLIMB_RIGHT_SENSOR_ID = 9;
 
+    public static final double LOOP_PERIOD_SECS = 0.02;
+
     public static class SwerveConstants {
         public static final byte FRONT_LEFT_DRIVE_ID = 4;
         public static final byte FRONT_RIGHT_DRIVE_ID = 22;
@@ -76,45 +77,11 @@ public final class Constants {
                 Math.hypot(TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0);
         public static final double MAX_ANGULAR_SPEED = MAX_LINEAR_SPEED / DRIVE_BASE_RADIUS;
 
-        // Invert the turning encoder, since the output shaft rotates in the opposite
-        // direction of
-        // the steering motor in the MAXSwerve Module.
-        public static final boolean TurningEncoderInverted = true;
-
-        // Calculations required for driving motor conversion factors and feed forward
-        public static final double WheelDiameterMeters = Units.inchesToMeters(3);
-        public static final double WheelCircumferenceMeters = WheelDiameterMeters * Math.PI;
+        public static final double WHEEL_RADIUS_METERS = Units.inchesToMeters(1.5);
 
         // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear
         // 15 teeth on the bevel pinion, 13 teeth on the driving motor
         public static final double DrivingMotorReduction = (45.0 * 22.0) / (13.0 * 15.0);
-
-        public static final double DrivingMotorFreeSpeedRps = 5676 / 60;
-        public static final double TurningEncoderPositionFactor = (2 * Math.PI); // radians
-        public static final double TurningEncoderVelocityFactor =
-                (2 * Math.PI) / 60.0; // radians per second
-        public static final double DriveWheelFreeSpeedMps =
-                (DrivingMotorFreeSpeedRps * WheelCircumferenceMeters) / DrivingMotorReduction;
-        public static final double TurningEncoderPositionPIDMinInput = 0; // radians
-        public static final double TurningEncoderPositionPIDMaxInput =
-                TurningEncoderPositionFactor; // radians
-
-        public static final double DrivingP = 0.4;
-        public static final double DrivingI = 0;
-        public static final double DrivingD = 0;
-        public static final double DrivingFF = 1 / DriveWheelFreeSpeedMps;
-        public static final double DrivingMinOutput = -1;
-        public static final double DrivingMaxOutput = 1;
-
-        public static final double TurningP = 0.45;
-        public static final double TurningI = 0;
-        public static final double TurningD = 0;
-        public static final double TurningFF = 0;
-        public static final double TurningMinOutput = -1;
-        public static final double TurningMaxOutput = 1;
-
-        public static final IdleMode DrivingMotorIdleMode = IdleMode.kBrake;
-        public static final IdleMode TurningMotorIdleMode = IdleMode.kBrake;
 
         public static final int DrivingMotorCurrentLimit = 40; // amps
         public static final int TurningMotorCurrentLimit = 20; // amps
