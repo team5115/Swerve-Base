@@ -36,8 +36,6 @@ import frc.team5115.Constants.SwerveConstants;
  * "/Drive/ModuleX/TurnAbsolutePositionRad"
  */
 public class ModuleIOSparkMax implements ModuleIO {
-    // Gear ratios for SDS MK4i L2, adjust as necessary
-
     private final CANSparkMax driveSparkMax;
     private final CANSparkMax turnSparkMax;
 
@@ -87,7 +85,11 @@ public class ModuleIOSparkMax implements ModuleIO {
         driveEncoder = driveSparkMax.getEncoder();
         turnEncoder = turnSparkMax.getAbsoluteEncoder(Type.kDutyCycle);
 
-        turnSparkMax.setInverted(SwerveConstants.TurningEncoderInverted);
+        // Invert the turning encoder, since the output shaft rotates in the opposite
+        // direction of
+        // the steering motor in the MAXSwerve Module.
+        turnSparkMax.setInverted(true);
+
         driveSparkMax.setSmartCurrentLimit(SwerveConstants.DrivingMotorCurrentLimit);
         turnSparkMax.setSmartCurrentLimit(SwerveConstants.TurningMotorCurrentLimit);
         driveSparkMax.enableVoltageCompensation(12.0);
@@ -99,8 +101,8 @@ public class ModuleIOSparkMax implements ModuleIO {
 
         turnEncoder.setAverageDepth(2);
 
-        driveSparkMax.setIdleMode(SwerveConstants.DrivingMotorIdleMode);
-        turnSparkMax.setIdleMode(SwerveConstants.TurningMotorIdleMode);
+        driveSparkMax.setIdleMode(IdleMode.kBrake);
+        turnSparkMax.setIdleMode(IdleMode.kBrake);
 
         driveSparkMax.burnFlash();
         turnSparkMax.burnFlash();
