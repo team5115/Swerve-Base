@@ -156,7 +156,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return autoChooser.get();
-        // return null;
     }
 
     private Command resetFieldOrientation() {
