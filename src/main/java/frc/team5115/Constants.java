@@ -77,6 +77,7 @@ public final class Constants {
                 Math.hypot(TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0);
         public static final double MAX_ANGULAR_SPEED = MAX_LINEAR_SPEED / DRIVE_BASE_RADIUS;
 
+        // Calculations required for driving motor conversion factors and feed forward
         public static final double WHEEL_RADIUS_METERS = Units.inchesToMeters(1.5);
 
         // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear
