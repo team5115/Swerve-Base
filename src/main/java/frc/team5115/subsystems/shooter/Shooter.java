@@ -13,8 +13,6 @@ import org.littletonrobotics.junction.Logger;
 public class Shooter extends SubsystemBase {
     private final ShooterIO io;
     private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
-    // This feedforward is in RPS so we convert the desired RPM to RPS
-    // when we run the .calculate() method
     private final SimpleMotorFeedforward auxFF;
     private final PIDController auxPID;
     private final PIDController amperPID;
@@ -124,8 +122,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public double spinAuxByPid(double rpm) {
-        // final double setpointRPS = rpm / 60.0;
-        // final double measuredRPS = inputs.auxVelocityRPM / 60.0;
+        // The feedforward and PID are in RPM
         final double feedforward = auxFF.calculate(rpm);
         final double feedback = auxPID.calculate(inputs.auxVelocityRPM, rpm);
         final double volts = feedforward + feedback;
