@@ -17,6 +17,7 @@ public interface ShooterIO {
         public double auxVelocityRPM = 0.0;
         public double auxAppliedVolts = 0.0;
         public double auxCurrentAmps = 0.0;
+        public double auxPositionRotations = 0.0;
 
         public double intakeVelocityRPM = 0.0;
         public double intakeAppliedVolts = 0.0;

@@ -35,7 +35,7 @@ public class DriveCommands {
 
     public static Command intakeUntilNote(Shooter shooter, Arm arm) {
         return Commands.sequence(
-                        arm.goToAngle(Rotation2d.fromDegrees(0)),
+                        arm.goToAngle(Rotation2d.fromDegrees(0), 1),
                         shooter.intake(),
                         shooter.centerNote(),
                         shooter.waitForDetectionState(true, 20),
@@ -47,8 +47,8 @@ public class DriveCommands {
 
     public static Command prepareAmp(Shooter shooter, Arm arm) {
         return Commands.sequence(
-                        arm.goToAngle(Rotation2d.fromDegrees(103.5)),
-                        new SpinAmper(shooter, Rotation2d.fromDegrees(178)).withTimeout(5),
+                        arm.goToAngle(Rotation2d.fromDegrees(103.5), 1),
+                        new SpinAmper(shooter, new Rotation2d(3.25)).withTimeout(5),
                         shooter.setIntakeSpeed(1),
                         shooter.setSideSpeeds(0.25),
                         shooter.stopAux(),
@@ -70,7 +70,7 @@ public class DriveCommands {
                         shooter.stopSides(),
                         shooter.stopAux(),
                         Commands.waitSeconds(0.5),
-                        new SpinAmper(shooter, Rotation2d.fromDegrees(0))
+                        new SpinAmper(shooter, new Rotation2d(0.2))
                                 .alongWith(stowArm(shooter, arm))
                                 .withTimeout(5))
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
@@ -78,7 +78,7 @@ public class DriveCommands {
 
     public static Command prepareShoot(Shooter shooter, Arm arm, double angle, boolean neverExit) {
         return Commands.parallel(
-                        arm.goToAngle(Rotation2d.fromDegrees(angle)),
+                        arm.goToAngle(Rotation2d.fromDegrees(angle), 1),
                         shooter.stop(), // we use this one because it doesn't require shooter subsystem
                         new SpinUpShooter(shooter, 5000, neverExit))
                 .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
@@ -99,7 +99,7 @@ public class DriveCommands {
                 shooter.stopIntake(),
                 shooter.stopSides(),
                 shooter.stopAux(),
-                arm.goToAngle(Rotation2d.fromDegrees(75.0)));
+                arm.goToAngle(Rotation2d.fromDegrees(75.0), 0.7));
     }
 
     /**

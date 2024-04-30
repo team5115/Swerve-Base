@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.team5115.Constants;
 import org.littletonrobotics.junction.Logger;
 
@@ -17,6 +18,7 @@ public class Shooter extends SubsystemBase {
     private final SimpleMotorFeedforward auxFF;
     private final PIDController auxPID;
     private final PIDController amperPID;
+    private final SysIdRoutine sysID;
 
     public Shooter(ShooterIO io) {
         this.io = io;
@@ -24,9 +26,9 @@ public class Shooter extends SubsystemBase {
         switch (Constants.currentMode) {
             case REAL:
             case REPLAY:
-                auxFF = new SimpleMotorFeedforward(0.29821, 0.12334, 0.029485);
-                auxPID = new PIDController(1, 0, 0);
-                amperPID = new PIDController(0.005, 0, 0);
+                auxFF = new SimpleMotorFeedforward(0.17484, 0.00223, 0.00030957);
+                auxPID = new PIDController(4.1686E-05, 0, 0);
+                amperPID = new PIDController(0.004, 0, 0);
                 break;
             case SIM:
                 auxFF = new SimpleMotorFeedforward(0, 0.123, 0.03);
@@ -41,6 +43,16 @@ public class Shooter extends SubsystemBase {
         }
 
         auxPID.setTolerance(20);
+
+        sysID =
+                new SysIdRoutine(
+                        new SysIdRoutine.Config(
+                                null,
+                                null,
+                                null,
+                                (state) -> Logger.recordOutput("Shooter/SysIdState", state.toString())),
+                        new SysIdRoutine.Mechanism(
+                                (voltage) -> io.setAuxVoltage(voltage.baseUnitMagnitude()), null, this));
     }
 
     public void periodic() {
@@ -102,25 +114,20 @@ public class Shooter extends SubsystemBase {
     }
 
     public double spinAmper(Rotation2d setpoint) {
-        // Add an offset onto the Rot2d and then good subtract it back off to get a value in
-        // the range
-        // of [-60, +300] instead of [-180, 180]
-        final double offset = 120;
-        final Rotation2d offset2d = Rotation2d.fromDegrees(offset);
+        final double offset = 90.0; // degrees
         final double pidOutput =
                 amperPID.calculate(
-                        inputs.amperPosition.plus(offset2d).getDegrees() - offset,
-                        setpoint.plus(offset2d).getDegrees() - offset);
+                        inputs.amperPosition.getDegrees() - offset, setpoint.getDegrees() - offset);
         io.setAmperPercent(pidOutput);
         Logger.recordOutput("Shooter/AmperPidPercent", pidOutput);
         return pidOutput;
     }
 
     public double spinAuxByPid(double rpm) {
-        final double setpointRPS = rpm / 60.0;
-        final double measuredRPS = inputs.auxVelocityRPM / 60.0;
-        final double feedforward = auxFF.calculate(setpointRPS);
-        final double feedback = auxPID.calculate(measuredRPS, setpointRPS);
+        // final double setpointRPS = rpm / 60.0;
+        // final double measuredRPS = inputs.auxVelocityRPM / 60.0;
+        final double feedforward = auxFF.calculate(rpm);
+        final double feedback = auxPID.calculate(inputs.auxVelocityRPM, rpm);
         final double volts = feedforward + feedback;
         io.setAuxVoltage(volts);
         return volts;
@@ -149,5 +156,13 @@ public class Shooter extends SubsystemBase {
                     io.setRightPercent(0);
                     io.setAuxPercent(0);
                 });
+    }
+
+    public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        return sysID.quasistatic(direction);
+    }
+
+    public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        return sysID.dynamic(direction);
     }
 }

@@ -56,13 +56,14 @@ public class Arm extends SubsystemBase {
         io.setArmVoltage(voltage);
     }
 
-    public Command goToAngle(Rotation2d setAngle) {
+    public Command goToAngle(Rotation2d setAngle, double timeout) {
         return Commands.runOnce(
                         () -> {
                             setpoint = setAngle;
                             armPID.setSetpoint(setpoint.getDegrees());
                         })
-                .andThen(Commands.waitUntil(() -> armPID.atSetpoint()));
+                .andThen(Commands.waitUntil(() -> armPID.atSetpoint()))
+                .withTimeout(timeout);
     }
 
     public void stop() {

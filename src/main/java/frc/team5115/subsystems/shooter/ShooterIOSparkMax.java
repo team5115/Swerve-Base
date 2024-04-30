@@ -39,6 +39,7 @@ public class ShooterIOSparkMax implements ShooterIO {
         auxEncoder = auxMotor.getEncoder();
         intakeEncoder = intakeMotor.getEncoder();
         amperEncoder = amperMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+        amperEncoder.setPositionConversionFactor(360);
 
         // Intake motor configs
         intakeMotor.setSmartCurrentLimit(60, 80);
@@ -83,6 +84,7 @@ public class ShooterIOSparkMax implements ShooterIO {
         inputs.auxVelocityRPM = auxEncoder.getVelocity();
         inputs.auxAppliedVolts = auxMotor.getAppliedOutput() * auxMotor.getBusVoltage();
         inputs.auxCurrentAmps = auxMotor.getOutputCurrent();
+        inputs.auxPositionRotations = auxEncoder.getPosition();
 
         inputs.intakeVelocityRPM = intakeEncoder.getVelocity();
         inputs.intakeAppliedVolts = intakeMotor.getAppliedOutput() * intakeMotor.getBusVoltage();
@@ -90,7 +92,7 @@ public class ShooterIOSparkMax implements ShooterIO {
 
         inputs.amperAppliedVolts = amperMotor.getAppliedOutput() * amperMotor.getBusVoltage();
         inputs.amperCurrentAmps = amperMotor.getOutputCurrent();
-        inputs.amperPosition = Rotation2d.fromRotations(amperEncoder.getPosition());
+        inputs.amperPosition = Rotation2d.fromDegrees(amperEncoder.getPosition());
 
         inputs.noteDetected = !sensor.get();
     }
