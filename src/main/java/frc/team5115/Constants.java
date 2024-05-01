@@ -14,6 +14,7 @@
 package frc.team5115;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -68,11 +69,6 @@ public final class Constants {
         public static final byte BACK_LEFT_TURN_ID = 23;
         public static final byte BACK_RIGHT_TURN_ID = 25;
 
-        public static final Rotation2d FRONT_LEFT_ANGULAR_OFFSET = Rotation2d.fromDegrees(90);
-        public static final Rotation2d FRONT_RIGHT_ANGULAR_OFFSET = Rotation2d.fromDegrees(0);
-        public static final Rotation2d BACK_LEFT_ANGULAR_OFFSET = Rotation2d.fromDegrees(180);
-        public static final Rotation2d BACK_RIGHT_ANGULAR_OFFSET = Rotation2d.fromDegrees(270);
-
         public static final double MAX_LINEAR_SPEED = 4.8; // meters per second
         public static final double TRACK_WIDTH_X = Units.inchesToMeters(23.75);
         public static final double TRACK_WIDTH_Y = Units.inchesToMeters(23.75);
@@ -82,6 +78,21 @@ public final class Constants {
 
         // Calculations required for driving motor conversion factors and feed forward
         public static final double WHEEL_RADIUS_METERS = Units.inchesToMeters(1.5);
+
+        // Required for inverse kinematics. +x is forward, +y is left
+        // The module order, as with everywhere else, is FL, FR, BL, BR
+        public static final Translation2d[] MODULE_TRANSLATIONS =
+                new Translation2d[] {
+                    new Translation2d(TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0),
+                    new Translation2d(TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / -2.0),
+                    new Translation2d(TRACK_WIDTH_X / -2.0, TRACK_WIDTH_Y / 2.0),
+                    new Translation2d(TRACK_WIDTH_X / -2.0, TRACK_WIDTH_Y / -2.0)
+                };
+
+        public static final Rotation2d FRONT_LEFT_ANGULAR_OFFSET = Rotation2d.fromDegrees(90);
+        public static final Rotation2d FRONT_RIGHT_ANGULAR_OFFSET = Rotation2d.fromDegrees(0);
+        public static final Rotation2d BACK_LEFT_ANGULAR_OFFSET = Rotation2d.fromDegrees(180);
+        public static final Rotation2d BACK_RIGHT_ANGULAR_OFFSET = Rotation2d.fromDegrees(270);
 
         // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear
         // 15 teeth on the bevel pinion, 13 teeth on the driving motor

@@ -24,7 +24,6 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -47,7 +46,7 @@ public class Drivetrain extends SubsystemBase {
     private final SysIdRoutine sysId;
 
     private final SwerveDriveKinematics kinematics =
-            new SwerveDriveKinematics(getModuleTranslations());
+            new SwerveDriveKinematics(SwerveConstants.MODULE_TRANSLATIONS);
     private Rotation2d rawGyroRotation = new Rotation2d();
     private SwerveModulePosition[] lastModulePositions = // For delta tracking
             new SwerveModulePosition[] {
@@ -207,7 +206,7 @@ public class Drivetrain extends SubsystemBase {
     public void stopWithX() {
         Rotation2d[] headings = new Rotation2d[4];
         for (int i = 0; i < 4; i++) {
-            headings[i] = getModuleTranslations()[i].getAngle();
+            headings[i] = SwerveConstants.MODULE_TRANSLATIONS[i].getAngle();
         }
         kinematics.resetHeadings(headings);
         stop();
@@ -266,15 +265,5 @@ public class Drivetrain extends SubsystemBase {
      */
     public void addVisionMeasurement(Pose2d visionPose, double timestamp) {
         poseEstimator.addVisionMeasurement(visionPose, timestamp);
-    }
-
-    /** Returns an array of module translations. */
-    public static Translation2d[] getModuleTranslations() {
-        return new Translation2d[] {
-            new Translation2d(SwerveConstants.TRACK_WIDTH_X / 2.0, SwerveConstants.TRACK_WIDTH_Y / -2.0),
-            new Translation2d(SwerveConstants.TRACK_WIDTH_X / 2.0, SwerveConstants.TRACK_WIDTH_Y / 2.0),
-            new Translation2d(SwerveConstants.TRACK_WIDTH_X / -2.0, SwerveConstants.TRACK_WIDTH_Y / -2.0),
-            new Translation2d(SwerveConstants.TRACK_WIDTH_X / -2.0, SwerveConstants.TRACK_WIDTH_Y / 2.0)
-        };
     }
 }
