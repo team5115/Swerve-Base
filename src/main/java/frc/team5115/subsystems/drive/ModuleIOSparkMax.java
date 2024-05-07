@@ -88,7 +88,7 @@ public class ModuleIOSparkMax implements ModuleIO {
         // Invert the turning encoder, since the output shaft rotates in the opposite
         // direction of
         // the steering motor in the MAXSwerve Module.
-        turnSparkMax.setInverted(true);
+        turnSparkMax.setInverted(false);
 
         driveSparkMax.setSmartCurrentLimit(SwerveConstants.DrivingMotorCurrentLimit);
         turnSparkMax.setSmartCurrentLimit(SwerveConstants.TurningMotorCurrentLimit);
@@ -119,7 +119,7 @@ public class ModuleIOSparkMax implements ModuleIO {
         inputs.driveAppliedVolts = driveSparkMax.getAppliedOutput() * driveSparkMax.getBusVoltage();
         inputs.driveCurrentAmps = driveSparkMax.getOutputCurrent();
         inputs.turnAbsolutePosition =
-                Rotation2d.fromRotations(turnEncoder.getPosition()).minus(absoluteEncoderOffset);
+                Rotation2d.fromRotations(-turnEncoder.getPosition()).minus(absoluteEncoderOffset);
         inputs.turnVelocityRadPerSec = Units.rotationsToRadians(turnEncoder.getVelocity());
         inputs.turnAppliedVolts = turnSparkMax.getAppliedOutput() * turnSparkMax.getBusVoltage();
         inputs.turnCurrentAmps = turnSparkMax.getOutputCurrent();
