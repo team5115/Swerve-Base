@@ -18,7 +18,6 @@ import static edu.wpi.first.units.Units.*;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -70,13 +69,13 @@ public class Drivetrain extends SubsystemBase {
         modules[2] = new Module(blModuleIO, 2);
         modules[3] = new Module(brModuleIO, 3);
 
-        final var ogPathFollowConfig =
-                new HolonomicPathFollowerConfig(
-                        new PIDConstants(0.05, 0.0, 0.0),
-                        new PIDConstants(1, 0.0, 0.0),
-                        6,
-                        SwerveConstants.DRIVE_BASE_RADIUS,
-                        new ReplanningConfig());
+        // final var ogPathFollowConfig =
+        //         new HolonomicPathFollowerConfig(
+        //                 new PIDConstants(0.05, 0.0, 0.0),
+        //                 new PIDConstants(1, 0.0, 0.0),
+        //                 6,
+        //                 SwerveConstants.DRIVE_BASE_RADIUS,
+        //                 new ReplanningConfig());
 
         // Configure AutoBuilder for PathPlanner
         AutoBuilder.configureHolonomic(
@@ -84,11 +83,10 @@ public class Drivetrain extends SubsystemBase {
                 this::setPose,
                 () -> kinematics.toChassisSpeeds(getModuleStates()),
                 this::runVelocity,
-                // ! It may be valuable to see how this other way (not supplying our own pids)
-                // might work
-                // new HolonomicPathFollowerConfig(MAX_LINEAR_SPEED, DRIVE_BASE_RADIUS, new
-                // ReplanningConfig()),
-                ogPathFollowConfig,
+                new HolonomicPathFollowerConfig(
+                        SwerveConstants.MAX_LINEAR_SPEED,
+                        SwerveConstants.DRIVE_BASE_RADIUS,
+                        new ReplanningConfig()),
                 this::isRedAlliance,
                 this);
         Pathfinding.setPathfinder(new LocalADStarAK());
