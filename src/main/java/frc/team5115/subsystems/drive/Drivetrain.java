@@ -69,14 +69,6 @@ public class Drivetrain extends SubsystemBase {
         modules[2] = new Module(blModuleIO, 2);
         modules[3] = new Module(brModuleIO, 3);
 
-        // final var ogPathFollowConfig =
-        //         new HolonomicPathFollowerConfig(
-        //                 new PIDConstants(0.05, 0.0, 0.0),
-        //                 new PIDConstants(1, 0.0, 0.0),
-        //                 6,
-        //                 SwerveConstants.DRIVE_BASE_RADIUS,
-        //                 new ReplanningConfig());
-
         // Configure AutoBuilder for PathPlanner
         AutoBuilder.configureHolonomic(
                 this::getPose,
