@@ -5,7 +5,6 @@ import frc.team5115.subsystems.shooter.Shooter;
 
 public class SpinUpShooter extends Command {
     private final Shooter shooter;
-    private final double pid_tolerance;
     private final double rpm;
     private final boolean neverExit;
     private boolean atSpeed;
@@ -15,13 +14,11 @@ public class SpinUpShooter extends Command {
         this.shooter = shooter;
         this.rpm = rpm;
         this.neverExit = neverExit;
-        pid_tolerance = 10;
     }
 
     @Override
     public void execute() {
-        double pid = shooter.spinAuxByPid(rpm * 1);
-        atSpeed = Math.abs(pid) < pid_tolerance;
+        atSpeed = shooter.spinAuxByPid(rpm);
     }
 
     @Override

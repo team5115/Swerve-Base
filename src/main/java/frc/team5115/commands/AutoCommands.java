@@ -16,6 +16,6 @@ public class AutoCommands {
         NamedCommands.registerCommand("Intake", DriveCommands.intakeUntilNote(shooter, arm));
         NamedCommands.registerCommand("Shoot", DriveCommands.triggerShoot(shooter));
         NamedCommands.registerCommand(
-                "PrepareClose", DriveCommands.prepareShoot(shooter, arm, 15, true));
+                "PrepareClose", DriveCommands.prepareShoot(shooter, arm, 15, false));
     }
 }

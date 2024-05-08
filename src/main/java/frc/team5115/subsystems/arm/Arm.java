@@ -15,11 +15,9 @@ public class Arm extends SubsystemBase {
     private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
     private final ArmFeedforward armFF;
     private final PIDController armPID;
-    private Rotation2d setpoint;
 
     public Arm(ArmIO io) {
         this.io = io;
-        this.setpoint = Rotation2d.fromDegrees(75.0);
 
         switch (Constants.currentMode) {
             case REAL:
@@ -38,6 +36,7 @@ public class Arm extends SubsystemBase {
         }
 
         armPID.setTolerance(5);
+        armPID.setSetpoint(75.0);
     }
 
     public void periodic() {
@@ -45,7 +44,7 @@ public class Arm extends SubsystemBase {
         Logger.processInputs("Arm", inputs);
 
         // Update the pids and feedforward
-        final double speed = armPID.calculate(inputs.armAngle.getDegrees(), setpoint.getDegrees());
+        final double speed = armPID.calculate(inputs.armAngle.getDegrees());
         double voltage = armFF.calculate(inputs.armAngle.getRadians(), speed);
         voltage = MathUtil.clamp(voltage, -10, +10);
 
@@ -56,10 +55,9 @@ public class Arm extends SubsystemBase {
         io.setArmVoltage(voltage);
     }
 
-    public Command goToAngle(Rotation2d setAngle, double timeout) {
+    public Command goToAngle(Rotation2d setpoint, double timeout) {
         return Commands.runOnce(
                         () -> {
-                            setpoint = setAngle;
                             armPID.setSetpoint(setpoint.getDegrees());
                         })
                 .andThen(Commands.waitUntil(() -> armPID.atSetpoint()))

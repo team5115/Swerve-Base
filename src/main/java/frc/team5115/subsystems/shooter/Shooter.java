@@ -121,13 +121,13 @@ public class Shooter extends SubsystemBase {
         return pidOutput;
     }
 
-    public double spinAuxByPid(double rpm) {
+    public boolean spinAuxByPid(double rpm) {
         // The feedforward and PID are in RPM
         final double feedforward = auxFF.calculate(rpm);
         final double feedback = auxPID.calculate(inputs.auxVelocityRPM, rpm);
         final double volts = feedforward + feedback;
         io.setAuxVoltage(volts);
-        return volts;
+        return auxPID.atSetpoint();
     }
 
     /** This command does NOT require the shooter subsystem so that it can override all else */
