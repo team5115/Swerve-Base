@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.team5115.commands.AutoCommands;
 import frc.team5115.commands.DriveCommands;
 import frc.team5115.subsystems.arm.Arm;
@@ -103,7 +102,7 @@ public class RobotContainer {
         // Set up auto routines
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-        // // Set up SysId routines
+        // Set up SysId routines
         // autoChooser.addOption(
         //         "Drive SysId (Quasistatic Forward)",
         //         drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
@@ -117,18 +116,18 @@ public class RobotContainer {
         //         "Drive SysId (Dynamic Reverse)",
         // drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
-        autoChooser.addOption(
-                "Shooter Aux SysId (Quasistatic Forward)",
-                shooter.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        autoChooser.addOption(
-                "Shooter Aux SysId (Quasistatic Reverse)",
-                shooter.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        autoChooser.addOption(
-                "Shooter Aux SysId (Dynamic Forward)",
-                shooter.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        autoChooser.addOption(
-                "Shooter Aux SysId (Dynamic Reverse)",
-                shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        // autoChooser.addOption(
+        //         "Shooter Aux SysId (Quasistatic Forward)",
+        //         shooter.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        // autoChooser.addOption(
+        //         "Shooter Aux SysId (Quasistatic Reverse)",
+        //         shooter.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        // autoChooser.addOption(
+        //         "Shooter Aux SysId (Dynamic Forward)",
+        //         shooter.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        // autoChooser.addOption(
+        //         "Shooter Aux SysId (Dynamic Reverse)",
+        //         shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse));
         // Configure the button bindings
         configureButtonBindings();
     }
