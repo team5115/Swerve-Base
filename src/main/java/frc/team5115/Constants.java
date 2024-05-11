@@ -14,6 +14,7 @@
 package frc.team5115;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -100,5 +101,10 @@ public final class Constants {
 
         public static final int DrivingMotorCurrentLimit = 40; // amps
         public static final int TurningMotorCurrentLimit = 20; // amps
+    }
+
+    public static class VisionConstants {
+        public static final String cameraName = ""; // TODO determine out the camera name
+        public static final Transform3d robotToCam = new Transform3d(); // TODO determine robot-to-cam transform3d
     }
 }

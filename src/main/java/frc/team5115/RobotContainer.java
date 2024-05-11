@@ -37,6 +37,7 @@ import frc.team5115.subsystems.shooter.Shooter;
 import frc.team5115.subsystems.shooter.ShooterIO;
 import frc.team5115.subsystems.shooter.ShooterIOSim;
 import frc.team5115.subsystems.shooter.ShooterIOSparkMax;
+import frc.team5115.subsystems.vision.PhotonVision;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -49,6 +50,7 @@ public class RobotContainer {
     // Subsystems
     private final GyroIO gyro;
     private final Drivetrain drivetrain;
+    private final PhotonVision vision;
     private final Shooter shooter;
     private final Arm arm;
 
@@ -73,6 +75,7 @@ public class RobotContainer {
                                 new ModuleIOSparkMax(1),
                                 new ModuleIOSparkMax(2),
                                 new ModuleIOSparkMax(3));
+                vision = new PhotonVision(drivetrain);
                 break;
 
             case SIM:
@@ -83,6 +86,7 @@ public class RobotContainer {
                 drivetrain =
                         new Drivetrain(
                                 gyro, new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim());
+                vision = null;
                 break;
 
             default:
@@ -93,11 +97,13 @@ public class RobotContainer {
                 drivetrain =
                         new Drivetrain(
                                 gyro, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
+                vision = null;
                 break;
         }
 
         // Register auto commands for pathplanner
-        AutoCommands.registerCommands(drivetrain, shooter, arm);
+        // PhotonVision is passed in here to prevent warnings, i.e. "unused variable: vision"
+        AutoCommands.registerCommands(shooter, arm, drivetrain, vision);
 
         // Set up auto routines
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());

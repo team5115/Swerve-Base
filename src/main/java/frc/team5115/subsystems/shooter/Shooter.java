@@ -53,6 +53,7 @@ public class Shooter extends SubsystemBase {
                                 (voltage) -> io.setAuxVoltage(voltage.baseUnitMagnitude()), null, this));
     }
 
+    @Override
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("Shooter", inputs);

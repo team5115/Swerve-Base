@@ -39,6 +39,7 @@ public class Arm extends SubsystemBase {
         armPID.setSetpoint(75.0);
     }
 
+    @Override
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("Arm", inputs);
