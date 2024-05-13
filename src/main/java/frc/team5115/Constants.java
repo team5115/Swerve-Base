@@ -104,7 +104,8 @@ public final class Constants {
     }
 
     public static class VisionConstants {
-        public static final String cameraName = ""; // TODO determine out the camera name
-        public static final Transform3d robotToCam = new Transform3d(); // TODO determine robot-to-cam transform3d
+        public static final String cameraName = "Stereo_Vision_1";
+        public static final Transform3d robotToCam =
+                new Transform3d(); // TODO determine robot-to-cam transform3d
     }
 }
