@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team5115.Constants.VisionConstants;
 import frc.team5115.subsystems.drive.Drivetrain;
 import java.util.Optional;
-import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -31,10 +31,11 @@ public class PhotonVision extends SubsystemBase {
                         VisionConstants.robotToCam);
     }
 
-    @AutoLogOutput
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
         poseEstimator.setReferencePose(prevEstimatedRobotPose);
-        return poseEstimator.update();
+        var pose = poseEstimator.update();
+        Logger.recordOutput("Vision/OptionalPose", pose.isPresent() ? pose.get().estimatedPose : null);
+        return pose;
     }
 
     @Override
@@ -43,6 +44,8 @@ public class PhotonVision extends SubsystemBase {
         if (option.isPresent()) {
             EstimatedRobotPose pose = option.get();
             drivetrain.addVisionMeasurement(pose.estimatedPose.toPose2d(), pose.timestampSeconds);
+            Logger.recordOutput("Vision/EstimatedPose", pose.estimatedPose);
+            System.out.println("PhotonVision detects tag");
         }
     }
 }
