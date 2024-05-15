@@ -14,6 +14,7 @@
 package frc.team5115;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
@@ -105,7 +106,13 @@ public final class Constants {
 
     public static class VisionConstants {
         public static final String cameraName = "Stereo_Vision_1";
+        public static final double camYaw = 180.0;
+        public static final double camPitch = 24.0;
+        public static final double camRoll = 0.0;
+        public static final double camZ = 32.5;
+        public static final double camX = -30.75;
+        public static final double camY = 1.0;
         public static final Transform3d robotToCam =
-                new Transform3d(); // TODO determine robot-to-cam transform3d
+                new Transform3d(camX, camY, camZ, new Rotation3d(camRoll, camPitch, camYaw));
     }
 }
