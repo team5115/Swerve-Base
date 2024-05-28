@@ -34,18 +34,17 @@ public class PhotonVision extends SubsystemBase {
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
         poseEstimator.setReferencePose(prevEstimatedRobotPose);
         var pose = poseEstimator.update();
-        Logger.recordOutput("Vision/OptionalPose", pose.isPresent() ? pose.get().estimatedPose : null);
         return pose;
     }
 
     @Override
     public void periodic() {
         var option = getEstimatedGlobalPose(drivetrain.getPose());
+        Logger.recordOutput("Vision/HasMeasurement", option.isPresent());
         if (option.isPresent()) {
             EstimatedRobotPose pose = option.get();
             drivetrain.addVisionMeasurement(pose.estimatedPose.toPose2d(), pose.timestampSeconds);
             Logger.recordOutput("Vision/EstimatedPose", pose.estimatedPose);
-            System.out.println("PhotonVision detects tag");
         }
     }
 }

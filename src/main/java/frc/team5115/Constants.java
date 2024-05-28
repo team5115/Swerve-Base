@@ -107,7 +107,7 @@ public final class Constants {
     public static class VisionConstants {
         public static final String cameraName = "Stereo_Vision_1";
         public static final double camYaw = Math.toRadians(180.0);
-        public static final double camPitch = Math.toRadians(24.0);
+        public static final double camPitch = Math.toRadians(-24.0);
         public static final double camRoll = Math.toRadians(0.0);
         public static final double camZ = 0.325;
         public static final double camX = -0.3075;
