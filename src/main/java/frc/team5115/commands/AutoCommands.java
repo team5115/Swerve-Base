@@ -28,9 +28,10 @@ public class AutoCommands {
             Shooter shooter) {
         NamedCommands.registerCommand(
                 "InitialShoot",
-                DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, 5000).andThen(feeder.feed()));
+                DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, 5000)
+                        .andThen(DriveCommands.feed(intake, feeder)));
         NamedCommands.registerCommand("Intake", DriveCommands.intakeUntilNote(arm, intake, feeder));
-        NamedCommands.registerCommand("Shoot", feeder.feed());
+        NamedCommands.registerCommand("Shoot", DriveCommands.feed(intake, feeder));
         NamedCommands.registerCommand(
                 "PrepareClose", DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, 5000));
     }

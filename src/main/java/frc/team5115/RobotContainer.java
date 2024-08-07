@@ -197,8 +197,7 @@ public class RobotContainer {
                 .b()
                 .onTrue(DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, 5000))
                 .onFalse(
-                        feeder
-                                .feed()
+                        DriveCommands.feed(intake, feeder)
                                 .andThen(shooter.stop())
                                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 

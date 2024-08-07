@@ -31,10 +31,6 @@ public class Feeder extends SubsystemBase {
         return setSpeeds(+0.08);
     }
 
-    public Command feed() {
-        return Commands.sequence(setSpeeds(+1), Commands.waitSeconds(0.5), stop());
-    }
-
     public Command setSpeeds(double percent) {
         return setSpeeds(percent, percent);
     }

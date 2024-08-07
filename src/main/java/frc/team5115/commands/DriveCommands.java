@@ -84,6 +84,15 @@ public class DriveCommands {
                 .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
+    public static Command feed(Intake intake, Feeder feeder) {
+        return Commands.sequence(
+                feeder.setSpeeds(+1),
+                intake.setSpeed(+1),
+                Commands.waitSeconds(0.5),
+                feeder.stop(),
+                intake.stop());
+    }
+
     public static Command vomit(Intake intake, Feeder feeder, Shooter shooter) {
         return Commands.runOnce(
                 () -> {
