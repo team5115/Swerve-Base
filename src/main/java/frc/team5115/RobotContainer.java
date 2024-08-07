@@ -1,23 +1,8 @@
-// Copyright 2021-2024 FRC 6328
-// http://github.com/Mechanical-Advantage
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// version 3 as published by the Free Software Foundation or
-// available in the root directory of this project.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-
 package frc.team5115;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -142,33 +127,26 @@ public class RobotContainer {
         //         drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
         // autoChooser.addOption(
         //         "Drive SysId (Dynamic Forward)",
-        // drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        //         drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward));
         // autoChooser.addOption(
         //         "Drive SysId (Dynamic Reverse)",
-        // drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-
+        //         drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse));
         // autoChooser.addOption(
-        //         "Shooter Aux SysId (Quasistatic Forward)",
+        //         "Shooter SysId (Quasistatic Forward)",
         //         shooter.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
         // autoChooser.addOption(
-        //         "Shooter Aux SysId (Quasistatic Reverse)",
+        //         "Shooter SysId (Quasistatic Reverse)",
         //         shooter.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
         // autoChooser.addOption(
-        //         "Shooter Aux SysId (Dynamic Forward)",
+        //         "Shooter SysId (Dynamic Forward)",
         //         shooter.sysIdDynamic(SysIdRoutine.Direction.kForward));
         // autoChooser.addOption(
-        //         "Shooter Aux SysId (Dynamic Reverse)",
+        //         "Shooter SysId (Dynamic Reverse)",
         //         shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-        // Configure the button bindings
+
         configureButtonBindings();
     }
 
-    /**
-     * Use this method to define your button->command mappings. Buttons can be created by
-     * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-     */
     private void configureButtonBindings() {
         drivetrain.setDefaultCommand(
                 DriveCommands.joystickDrive(
