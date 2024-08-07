@@ -28,8 +28,8 @@ public class Shooter extends SubsystemBase {
                 pid = new PIDController(4.1686E-05, 0, 0);
                 break;
             case SIM:
-                feedforward = new SimpleMotorFeedforward(0, 0.123, 0.03);
-                pid = new PIDController(1, 0, 0);
+                feedforward = new SimpleMotorFeedforward(0, 2.10E-3, 0.03);
+                pid = new PIDController(0.006, 0, 0);
                 break;
             default:
                 feedforward = new SimpleMotorFeedforward(0, 0, 0);
