@@ -23,8 +23,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.team5115.Constants.SwerveConstants;
+import frc.team5115.subsystems.amper.Amper;
 import frc.team5115.subsystems.arm.Arm;
 import frc.team5115.subsystems.drive.Drivetrain;
+import frc.team5115.subsystems.feeder.Feeder;
+import frc.team5115.subsystems.intake.Intake;
 import frc.team5115.subsystems.shooter.Shooter;
 import java.util.function.DoubleSupplier;
 
@@ -33,73 +36,70 @@ public class DriveCommands {
 
     private DriveCommands() {}
 
-    public static Command intakeUntilNote(Shooter shooter, Arm arm) {
+    public static Command intakeUntilNote(Arm arm, Intake intake, Feeder feeder) {
         return Commands.sequence(
                         arm.goToAngle(Rotation2d.fromDegrees(0), 1),
-                        shooter.intake(),
-                        shooter.centerNote(),
-                        shooter.waitForDetectionState(true, 20),
+                        intake.intake(),
+                        feeder.centerNote(),
+                        feeder.waitForDetectionState(true, 20),
                         Commands.waitSeconds(0.25),
-                        shooter.stopIntake(),
-                        shooter.stopSides())
+                        intake.stop(),
+                        feeder.stop())
                 .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
-    public static Command prepareAmp(Shooter shooter, Arm arm) {
+    public static Command prepareAmp(Arm arm, Amper amper, Intake intake, Feeder feeder) {
         return Commands.sequence(
                         arm.goToAngle(Rotation2d.fromDegrees(103.5), 1),
-                        new SpinAmper(shooter, new Rotation2d(3.25)).withTimeout(5),
-                        shooter.setIntakeSpeed(1),
-                        shooter.setSideSpeeds(0.25),
-                        shooter.stopAux(),
+                        new SpinAmper(amper, new Rotation2d(3.25)).withTimeout(5),
+                        intake.setSpeed(1),
+                        feeder.setSpeeds(0.25),
                         Commands.waitSeconds(0.8),
-                        shooter.stopSides(),
-                        shooter.setIntakeSpeed(-0.9))
+                        feeder.stop(),
+                        intake.setSpeed(-0.9))
                 .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
-    public static Command triggerAmp(Shooter shooter, Arm arm) {
+    public static Command triggerAmp(Arm arm, Amper amper, Intake intake, Feeder feeder) {
         return Commands.sequence(
-                        shooter.setIntakeSpeed(-0.9),
-                        shooter.setSideSpeeds(-1),
-                        shooter.setAuxSpeed(-1),
-                        shooter.waitForDetectionState(true, 1),
-                        shooter.waitForDetectionState(false, 1),
+                        intake.setSpeed(-0.9),
+                        feeder.setSpeeds(-1),
+                        feeder.waitForDetectionState(true, 1),
+                        feeder.waitForDetectionState(false, 1),
                         Commands.waitSeconds(0.22),
-                        shooter.stopIntake(),
-                        shooter.stopSides(),
-                        shooter.stopAux(),
+                        intake.stop(),
+                        feeder.stop(),
                         Commands.waitSeconds(0.5),
-                        new SpinAmper(shooter, new Rotation2d(0.2))
-                                .alongWith(stowArm(shooter, arm))
-                                .withTimeout(5))
+                        new SpinAmper(amper, new Rotation2d(0.2)).alongWith(arm.stow()).withTimeout(5))
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
 
-    public static Command prepareShoot(Shooter shooter, Arm arm, double angle, boolean neverExit) {
+    public static Command prepareShoot(
+            Arm arm, Intake intake, Feeder feeder, Shooter shooter, double angle, boolean neverExit) {
         return Commands.parallel(
+                        intake.stop(),
+                        feeder.stop(),
                         arm.goToAngle(Rotation2d.fromDegrees(angle), 1),
-                        shooter.stop(), // we use this one because it doesn't require shooter subsystem
                         new SpinUpShooter(shooter, 5000, neverExit))
                 .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
-    public static Command triggerShoot(Shooter shooter) {
-        return Commands.sequence(
-                        shooter.setSideSpeeds(+1),
-                        Commands.waitSeconds(0.5),
-                        shooter.stopIntake(),
-                        shooter.stopSides(),
-                        shooter.stopAux())
-                .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    public static Command vomit(Intake intake, Feeder feeder, Shooter shooter) {
+        return Commands.runOnce(
+                () -> {
+                    intake.vomit();
+                    feeder.vomit();
+                    shooter.vomit();
+                });
     }
 
-    public static Command stowArm(Shooter shooter, Arm arm) {
-        return Commands.sequence(
-                shooter.stopIntake(),
-                shooter.stopSides(),
-                shooter.stopAux(),
-                arm.goToAngle(Rotation2d.fromDegrees(75.0), 0.7));
+    public static Command forceStop(Intake intake, Feeder feeder, Shooter shooter) {
+        return Commands.runOnce(
+                () -> {
+                    intake.forceStop();
+                    feeder.forceStop();
+                    shooter.forceStop();
+                });
     }
 
     /**

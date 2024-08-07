@@ -18,7 +18,7 @@ public class SpinUpShooter extends Command {
 
     @Override
     public void execute() {
-        atSpeed = shooter.spinAuxByPid(rpm);
+        atSpeed = shooter.spinByPid(rpm);
     }
 
     @Override

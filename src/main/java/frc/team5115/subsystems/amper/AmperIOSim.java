@@ -1,22 +1,23 @@
-package frc.team5115.subsystems.shooter;
+package frc.team5115.subsystems.amper;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.team5115.Constants;
 
-public class ShooterIOSim implements ShooterIO {
-    private final FlywheelSim sim;
+public class AmperIOSim implements AmperIO {
+    private final DCMotorSim sim;
     private double appliedVolts;
 
-    public ShooterIOSim() {
-        sim = new FlywheelSim(DCMotor.getNEO(1), 1.0, 0.0002);
+    public AmperIOSim() {
+        sim = new DCMotorSim(new DCMotor(+12.0, +7.909, +24.0, +5.0, +10.472, +1), +1.0, 0.0002);
     }
 
     @Override
-    public void updateInputs(ShooterIOInputs inputs) {
+    public void updateInputs(AmperIOInputs inputs) {
         sim.update(Constants.LOOP_PERIOD_SECS);
-        inputs.velocityRPM = sim.getAngularVelocityRPM();
+        inputs.position = Rotation2d.fromRadians(sim.getAngularPositionRad());
         inputs.appliedVolts = appliedVolts;
         inputs.currentAmps = Math.abs(sim.getCurrentDrawAmps());
     }

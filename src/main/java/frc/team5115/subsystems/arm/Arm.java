@@ -65,6 +65,10 @@ public class Arm extends SubsystemBase {
                 .withTimeout(timeout);
     }
 
+    public Command stow() {
+        return goToAngle(Rotation2d.fromDegrees(75.0), 0.7);
+    }
+
     public void stop() {
         io.setArmVoltage(0);
     }

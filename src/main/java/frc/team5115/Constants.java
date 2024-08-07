@@ -48,9 +48,9 @@ public final class Constants {
     public static final byte SNOWBLOWER_MOTOR_ID = 21;
     public static final byte ARM_LEFT_MOTOR_ID = 3;
     public static final byte ARM_RIGHT_MOTOR_ID = 33;
-    public static final byte SHOOTER_RIGHT_MOTOR_ID = 27;
-    public static final byte SHOOTER_LEFT_MOTOR_ID = 20;
-    public static final byte SHOTER_AUX_MOTOR_ID = 35;
+    public static final byte FEEDER_RIGHT_MOTOR_ID = 27;
+    public static final byte FEEDER_LEFT_MOTOR_ID = 20;
+    public static final byte SHOOTER_MOTOR_ID = 35;
     public static final byte CLIMBER_LEFT_MOTOR_ID = 30;
     public static final byte CLIMBER_RIGHT_MOTOR_ID = 31;
 
