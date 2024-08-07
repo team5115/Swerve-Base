@@ -16,7 +16,4 @@ public interface ShooterIO {
 
     /** Run the shooter motor at the specified voltage. */
     public default void setVoltage(double volts) {}
-
-    /** Run the shooter motor at the specified percentage. */
-    public default void setPercent(double percent) {}
 }

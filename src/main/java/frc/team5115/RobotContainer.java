@@ -195,7 +195,7 @@ public class RobotContainer {
 
         joyDrive
                 .b()
-                .onTrue(DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, true))
+                .onTrue(DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, 5000))
                 .onFalse(
                         feeder
                                 .feed()

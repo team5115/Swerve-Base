@@ -16,6 +16,8 @@ public class Shooter extends SubsystemBase {
     private final PIDController pid;
     private final SysIdRoutine sysID;
 
+    private double setpointRPM;
+
     public Shooter(ShooterIO io) {
         this.io = io;
 
@@ -52,21 +54,26 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("Shooter", inputs);
+        Logger.recordOutput("Shooter/Setpoint RPM", setpointRPM);
+        Logger.recordOutput("Shooter/At Setpoint?", pid.atSetpoint());
+
+        final double volts =
+                feedforward.calculate(setpointRPM) + pid.calculate(inputs.velocityRPM, setpointRPM);
+        io.setVoltage(volts);
     }
 
     public Command stop() {
-        return setSpeed(+0);
+        return Commands.runOnce(() -> setpointRPM = 0, this);
     }
 
-    public Command setSpeed(double percent) {
-        return Commands.runOnce(() -> io.setPercent(percent), this);
+    public Command spinToSpeed(double rpm) {
+        return Commands.runOnce(() -> setSetpoint(rpm), this)
+                .andThen(Commands.waitUntil(() -> pid.atSetpoint()));
     }
 
-    public boolean spinByPid(double rpm) {
-        // The feedforward and PID are in RPM
-        final double volts = feedforward.calculate(rpm) + pid.calculate(inputs.velocityRPM, rpm);
-        io.setVoltage(volts);
-        return pid.atSetpoint();
+    private void setSetpoint(double rpm) {
+        setpointRPM = rpm;
+        pid.setSetpoint(rpm);
     }
 
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
@@ -78,10 +85,10 @@ public class Shooter extends SubsystemBase {
     }
 
     public void vomit() {
-        io.setPercent(-0.9);
+        setSetpoint(-3000);
     }
 
     public void forceStop() {
-        io.setPercent(-0.9);
+        setSetpoint(+0);
     }
 }

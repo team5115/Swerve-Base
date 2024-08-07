@@ -26,10 +26,4 @@ public class ShooterIOSim implements ShooterIO {
         appliedVolts = MathUtil.clamp(volts, -12.0, +12.0);
         sim.setInputVoltage(appliedVolts);
     }
-
-    @Override
-    public void setPercent(double percent) {
-        appliedVolts = MathUtil.clamp(percent * 12, -12.0, +12.0);
-        sim.setInputVoltage(appliedVolts);
-    }
 }

@@ -33,11 +33,6 @@ public class ShooterIOSparkMax implements ShooterIO {
     }
 
     @Override
-    public void setPercent(double percent) {
-        motor.set(percent);
-    }
-
-    @Override
     public void setVoltage(double volts) {
         motor.setVoltage(volts);
     }
