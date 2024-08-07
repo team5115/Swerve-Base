@@ -1,13 +1,14 @@
 package frc.team5115;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.team5115.commands.AutoCommands;
 import frc.team5115.commands.DriveCommands;
 import frc.team5115.subsystems.amper.Amper;
 import frc.team5115.subsystems.amper.AmperIO;
@@ -113,7 +114,7 @@ public class RobotContainer {
 
         // Register auto commands for pathplanner
         // PhotonVision is passed in here to prevent warnings, i.e. "unused variable: vision"
-        AutoCommands.registerCommands(drivetrain, vision, arm, amper, intake, feeder, shooter);
+        registerCommands(drivetrain, vision, arm, amper, intake, feeder, shooter);
 
         // Set up auto routines
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -183,6 +184,32 @@ public class RobotContainer {
                 .x()
                 .onTrue(DriveCommands.prepareAmp(arm, amper, intake, feeder))
                 .onFalse(DriveCommands.triggerAmp(arm, amper, intake, feeder));
+    }
+
+    /**
+     * Registers commands for pathplanner to use in autos
+     *
+     * @param shooter the shooter subsystem
+     * @param arm the arm subsystem
+     * @param drivetrain the drivetrain subsytem (not currently used)
+     * @param photonVision the photonvision subsystem (not currently used)
+     */
+    public static void registerCommands(
+            Drivetrain drivetrain,
+            PhotonVision vision,
+            Arm arm,
+            Amper amper,
+            Intake intake,
+            Feeder feeder,
+            Shooter shooter) {
+        NamedCommands.registerCommand(
+                "InitialShoot",
+                DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, 5000)
+                        .andThen(DriveCommands.feed(intake, feeder)));
+        NamedCommands.registerCommand("Intake", DriveCommands.intakeUntilNote(arm, intake, feeder));
+        NamedCommands.registerCommand("Shoot", DriveCommands.feed(intake, feeder));
+        NamedCommands.registerCommand(
+                "PrepareClose", DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, 5000));
     }
 
     /**
