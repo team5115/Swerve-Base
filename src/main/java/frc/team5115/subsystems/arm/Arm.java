@@ -13,8 +13,8 @@ import org.littletonrobotics.junction.Logger;
 public class Arm extends SubsystemBase {
     private final ArmIO io;
     private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
-    private final ArmFeedforward armFF;
-    private final PIDController armPID;
+    private final ArmFeedforward feedforward;
+    private final PIDController pid;
 
     public Arm(ArmIO io) {
         this.io = io;
@@ -22,34 +22,36 @@ public class Arm extends SubsystemBase {
         switch (Constants.currentMode) {
             case REAL:
             case REPLAY:
-                armFF = new ArmFeedforward(0.3, 0.35, 0.13509, 0.048686);
-                armPID = new PIDController(0.425, 0.0, 0.0);
+                feedforward = new ArmFeedforward(0.3, 0.35, 0.13509, 0.048686);
+                pid = new PIDController(0.425, 0.0, 0.0);
                 break;
             case SIM:
-                armFF = new ArmFeedforward(0.0, 0.35, 0.1351, 0.0);
-                armPID = new PIDController(0.5, 0.0, 0.0);
+                feedforward = new ArmFeedforward(0.0, 0.35, 0.1351, 0.0);
+                pid = new PIDController(0.5, 0.0, 0.0);
                 break;
             default:
-                armFF = new ArmFeedforward(0.0, 0.0, 0, 0.0);
-                armPID = new PIDController(0.0, 0.0, 0.0);
+                feedforward = new ArmFeedforward(0.0, 0.0, 0, 0.0);
+                pid = new PIDController(0.0, 0.0, 0.0);
                 break;
         }
 
-        armPID.setTolerance(5);
-        armPID.setSetpoint(75.0);
+        pid.setTolerance(5);
+        pid.setSetpoint(75.0);
     }
 
     @Override
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("Arm", inputs);
+        Logger.recordOutput("Arm/Setpoint Degrees", pid.getSetpoint());
+        Logger.recordOutput("Arm/At Setpoint?", pid.atSetpoint());
 
         // Update the pids and feedforward
-        final double speed = armPID.calculate(inputs.armAngle.getDegrees());
-        double voltage = armFF.calculate(inputs.armAngle.getRadians(), speed);
+        final double speed = pid.calculate(inputs.armAngle.getDegrees());
+        double voltage = feedforward.calculate(inputs.armAngle.getRadians(), speed);
         voltage = MathUtil.clamp(voltage, -10, +10);
 
-        if (Math.abs(voltage) < 2 * armFF.ks) {
+        if (Math.abs(voltage) < 2 * feedforward.ks) {
             voltage = 0;
         }
 
@@ -59,10 +61,14 @@ public class Arm extends SubsystemBase {
     public Command goToAngle(Rotation2d setpoint, double timeout) {
         return Commands.runOnce(
                         () -> {
-                            armPID.setSetpoint(setpoint.getDegrees());
+                            pid.setSetpoint(setpoint.getDegrees());
                         })
-                .andThen(Commands.waitUntil(() -> armPID.atSetpoint()))
+                .andThen(Commands.waitUntil(() -> pid.atSetpoint()))
                 .withTimeout(timeout);
+    }
+
+    public Command stow() {
+        return goToAngle(Rotation2d.fromDegrees(75.0), 0.7);
     }
 
     public void stop() {
