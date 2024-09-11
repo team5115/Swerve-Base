@@ -53,4 +53,8 @@ public class Feeder extends SubsystemBase {
         io.setLeftPercent(0);
         io.setRightPercent(0);
     }
+
+    public boolean noteDetected() {
+        return inputs.noteDetected;
+    }
 }

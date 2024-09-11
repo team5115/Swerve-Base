@@ -4,6 +4,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -62,6 +64,9 @@ public class RobotContainer {
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
 
+    // Shuffleboard
+    private final GenericEntry noteDetectedEntry;
+
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         switch (Constants.currentMode) {
@@ -82,6 +87,8 @@ public class RobotContainer {
                                 new ModuleIOSparkMax(3));
                 // vision = new PhotonVision(drivetrain);
                 vision = null;
+                noteDetectedEntry =
+                        Shuffleboard.getTab("SmartDashboard").add("Has note?", false).getEntry();
                 break;
 
             case SIM:
@@ -96,6 +103,7 @@ public class RobotContainer {
                         new Drivetrain(
                                 gyro, new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim());
                 vision = null;
+                noteDetectedEntry = null;
                 break;
 
             default:
@@ -110,6 +118,7 @@ public class RobotContainer {
                         new Drivetrain(
                                 gyro, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
                 vision = null;
+                noteDetectedEntry = null;
                 break;
         }
 
@@ -185,6 +194,12 @@ public class RobotContainer {
                 .x()
                 .onTrue(DriveCommands.prepareAmp(arm, amper, intake, feeder))
                 .onFalse(DriveCommands.triggerAmp(arm, amper, intake, feeder));
+    }
+
+    public void robotPeriodic() {
+        if (noteDetectedEntry != null) {
+            noteDetectedEntry.setBoolean(feeder.noteDetected());
+        }
     }
 
     /**
