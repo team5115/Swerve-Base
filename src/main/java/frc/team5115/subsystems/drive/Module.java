@@ -125,7 +125,7 @@ public class Module {
 
     /** Returns the current turn angle of the module. */
     public Rotation2d getAngle() {
-        if (index==0) {
+        if (index == 0) {
             return inputs.turnAbsolutePosition.plus(Rotation2d.fromDegrees(180));
         } else {
             return inputs.turnAbsolutePosition;

@@ -14,13 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PrepareClose"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "InitialShoot"
+            "name": "InitialShot"
           }
         },
         {
@@ -47,15 +41,28 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "parallel",
                 "data": {
-                  "pathName": "ShootTop"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ArmFor3.5ft"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "ShootTop"
+                      }
+                    }
+                  ]
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot"
+                  "name": "Feed"
                 }
               }
             ]
@@ -93,7 +100,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot"
+                  "name": "Feed"
+                }
+              },
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": []
                 }
               }
             ]
@@ -118,7 +131,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot"
+                  "name": "Feed"
                 }
               }
             ]
@@ -156,7 +169,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot"
+                  "name": "Feed"
                 }
               }
             ]
@@ -194,7 +207,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot"
+                  "name": "Feed"
                 }
               }
             ]
