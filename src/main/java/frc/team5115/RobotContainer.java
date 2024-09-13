@@ -224,10 +224,14 @@ public class RobotContainer {
                         .andThen(DriveCommands.feed(intake, feeder)));
         NamedCommands.registerCommand("Intake", DriveCommands.intakeUntilNote(arm, intake, feeder));
         NamedCommands.registerCommand("Feed", DriveCommands.feed(intake, feeder));
+
+        // TODO determine angles for medium and far
         NamedCommands.registerCommand(
-                "ArmFor3.5ft",
-                DriveCommands.prepareShoot(
-                        arm, intake, feeder, shooter, 20 /* TODO determine angle */, 5000));
+                "ArmForNear", DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, 5000));
+        NamedCommands.registerCommand(
+                "ArmForMedium", DriveCommands.prepareShoot(arm, intake, feeder, shooter, 20, 5000));
+        NamedCommands.registerCommand(
+                "ArmForFar", DriveCommands.prepareShoot(arm, intake, feeder, shooter, 30, 5000));
     }
 
     /**
