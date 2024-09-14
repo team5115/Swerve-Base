@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4,
-      "y": 5.6
+      "x": 1.3499999999999999,
+      "y": 5.55
     },
-    "rotation": -1.6424404265381459e-21
+    "rotation": -2.541510909596298e-14
   },
   "command": {
     "type": "sequential",
@@ -28,7 +28,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "IntakeTop"
+                        "pathName": "TopNoteIntake"
                       }
                     },
                     {
@@ -47,7 +47,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "ShootTop"
+                        "pathName": "TopNoteShoot"
                       }
                     },
                     {
@@ -79,7 +79,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "IntakeBottom"
+                        "pathName": "BottomNoteIntake"
                       }
                     },
                     {
@@ -98,7 +98,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "ShootBottom"
+                        "pathName": "BottomNoteShoot"
                       }
                     },
                     {
@@ -130,7 +130,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Intake_shootMid"
+                        "pathName": "MidNote"
                       }
                     },
                     {
@@ -175,7 +175,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "IntakeBackTopv2"
+                        "pathName": "TopBackIntake"
                       }
                     },
                     {
@@ -194,7 +194,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "ShootBackTop"
+                        "pathName": "TopBackShoot"
                       }
                     },
                     {
@@ -226,7 +226,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "IntakeBackTwo"
+                        "pathName": "Top2ndIntake"
                       }
                     },
                     {
@@ -245,7 +245,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "ShootBackTwo"
+                        "pathName": "Top2ndShoot"
                       }
                     },
                     {
