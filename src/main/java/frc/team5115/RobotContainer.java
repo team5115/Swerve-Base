@@ -59,7 +59,7 @@ public class RobotContainer {
 
     // Controller
     private final CommandXboxController joyDrive = new CommandXboxController(0);
-    private final CommandXboxController joyManip = new CommandXboxController(1);
+    // private final CommandXboxController joyManip = new CommandXboxController(1);
 
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
@@ -169,20 +169,20 @@ public class RobotContainer {
         // joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
         joyDrive.start().onTrue(resetFieldOrientation());
 
-        joyManip
+        joyDrive
                 .back()
                 .onTrue(DriveCommands.vomit(intake, feeder, shooter))
                 .onFalse(DriveCommands.forceStop(intake, feeder, shooter));
 
-        joyManip.a().onTrue(DriveCommands.intakeUntilNote(arm, intake, feeder));
+        joyDrive.a().onTrue(DriveCommands.intakeUntilNote(arm, intake, feeder));
 
-        joyManip
+        joyDrive
                 .y()
                 .onTrue(
                         Commands.parallel(arm.stow(), shooter.stop(), feeder.stop(), intake.stop())
                                 .withInterruptBehavior(InterruptionBehavior.kCancelSelf));
 
-        joyManip
+        joyDrive
                 .b()
                 .onTrue(DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, 5000))
                 .onFalse(
@@ -190,7 +190,7 @@ public class RobotContainer {
                                 .andThen(shooter.stop())
                                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming));
 
-        joyManip
+        joyDrive
                 .x()
                 .onTrue(DriveCommands.prepareAmp(arm, amper, intake, feeder))
                 .onFalse(DriveCommands.triggerAmp(arm, amper, intake, feeder));
