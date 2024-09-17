@@ -75,7 +75,7 @@ public class DriveCommands {
         return Commands.sequence(
                 feeder.setSpeeds(+1),
                 intake.setSpeed(+1),
-                Commands.waitSeconds(1),
+                Commands.waitSeconds(0.5),
                 feeder.stop(),
                 intake.stop());
     }

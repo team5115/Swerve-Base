@@ -125,6 +125,8 @@ public class Module {
 
     /** Returns the current turn angle of the module. */
     public Rotation2d getAngle() {
+        // ! This is a dirty fix for accidentally zeroing the front left module backwards
+        // TODO rezero front left module and remove this if statement
         if (index == 0) {
             return inputs.turnAbsolutePosition.plus(Rotation2d.fromDegrees(180));
         } else {
