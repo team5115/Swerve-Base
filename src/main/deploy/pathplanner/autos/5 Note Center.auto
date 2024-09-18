@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3499999999999999,
+      "x": 1.35,
       "y": 5.55
     },
-    "rotation": -2.541510909596298e-14
+    "rotation": -7.422937896192323e-27
   },
   "command": {
     "type": "sequential",
@@ -28,7 +28,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "TopNoteIntake"
+                        "pathName": "IntakeTop"
                       }
                     },
                     {
@@ -47,7 +47,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "TopNoteShoot"
+                        "pathName": "ShootTop"
                       }
                     },
                     {
@@ -79,7 +79,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "BottomNoteIntake"
+                        "pathName": "IntakeBottom"
                       }
                     },
                     {
@@ -98,7 +98,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "BottomNoteShoot"
+                        "pathName": "ShootBottom"
                       }
                     },
                     {
@@ -175,7 +175,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "TopBackIntake"
+                        "pathName": "IntakeTopBack"
                       }
                     },
                     {
@@ -194,7 +194,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "TopBackShoot"
+                        "pathName": "ShootTopBack"
                       }
                     },
                     {
