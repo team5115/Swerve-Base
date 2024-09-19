@@ -229,7 +229,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "ArmForNear", DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, 5000));
         NamedCommands.registerCommand(
-                "ArmForMedium", DriveCommands.prepareShoot(arm, intake, feeder, shooter, 20, 5000));
+                "ArmForMedium", DriveCommands.prepareShoot(arm, intake, feeder, shooter, 40, 5000));
         NamedCommands.registerCommand(
                 "ArmForFar", DriveCommands.prepareShoot(arm, intake, feeder, shooter, 30, 5000));
     }

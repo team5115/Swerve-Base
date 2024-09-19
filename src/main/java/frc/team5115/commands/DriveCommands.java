@@ -25,10 +25,11 @@ public class DriveCommands {
 
     public static Command intakeUntilNote(Arm arm, Intake intake, Feeder feeder) {
         return Commands.sequence(
-                        arm.goToAngle(Rotation2d.fromDegrees(0), 1),
                         intake.intake(),
                         feeder.centerNote(),
-                        feeder.waitForDetectionState(true, 20),
+                        Commands.parallel(
+                                arm.goToAngle(Rotation2d.fromDegrees(0), 1),
+                                feeder.waitForDetectionState(true, 20)),
                         Commands.waitSeconds(0.25),
                         intake.stop(),
                         feeder.stop())
