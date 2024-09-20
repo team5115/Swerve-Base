@@ -218,20 +218,32 @@ public class RobotContainer {
             Intake intake,
             Feeder feeder,
             Shooter shooter) {
+        // Bring the arm down, turn the intake and shooter on, and then feed first shot
         NamedCommands.registerCommand(
                 "InitialShot",
-                DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, 5000)
-                        .andThen(DriveCommands.feed(intake, feeder)));
-        NamedCommands.registerCommand("Intake", DriveCommands.intakeUntilNote(arm, intake, feeder));
-        NamedCommands.registerCommand("Feed", DriveCommands.feed(intake, feeder));
+                Commands.parallel(
+                                arm.setAngle(Rotation2d.fromDegrees(15)),
+                                intake.setSpeed(+1),
+                                shooter.spinToSpeed(5000))
+                        .andThen(feeder.setSpeeds(+1)));
+
+        NamedCommands.registerCommand(
+                "Intake",
+                Commands.sequence(
+                                arm.setAngle(Rotation2d.fromDegrees(0)),
+                                feeder.centerNote(),
+                                feeder.waitForDetectionState(true, 3),
+                                Commands.waitSeconds(0.25),
+                                feeder.stop())
+                        .withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+
+        NamedCommands.registerCommand(
+                "Feed", Commands.sequence(feeder.setSpeeds(+1), Commands.waitSeconds(0.5), feeder.stop()));
 
         // TODO determine angles for medium and far
-        NamedCommands.registerCommand(
-                "ArmForNear", DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, 5000));
-        NamedCommands.registerCommand(
-                "ArmForMedium", DriveCommands.prepareShoot(arm, intake, feeder, shooter, 40, 5000));
-        NamedCommands.registerCommand(
-                "ArmForFar", DriveCommands.prepareShoot(arm, intake, feeder, shooter, 30, 5000));
+        NamedCommands.registerCommand("ArmForNear", arm.goToAngle(Rotation2d.fromDegrees(15), 1));
+        NamedCommands.registerCommand("ArmForMedium", arm.goToAngle(Rotation2d.fromDegrees(40), 1));
+        NamedCommands.registerCommand("ArmForFar", arm.goToAngle(Rotation2d.fromDegrees(50), 1));
     }
 
     /**
