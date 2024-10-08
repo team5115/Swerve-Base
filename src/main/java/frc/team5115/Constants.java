@@ -85,7 +85,7 @@ public final class Constants {
     }
 
     public static class VisionConstants {
-        public static final String cameraName = "Stereo_Vision_1";
+        public static final String cameraName = "Microsoft_LifeCam_HD-3000";
         public static final double camYaw = Math.toRadians(180.0);
         public static final double camPitch = Math.toRadians(-22.0);
         public static final double camRoll = Math.toRadians(-1.0);
