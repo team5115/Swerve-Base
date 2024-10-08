@@ -27,9 +27,8 @@ public class DriveCommands {
         return Commands.sequence(
                         intake.intake(),
                         feeder.centerNote(),
-                        Commands.parallel(
-                                arm.goToAngle(Rotation2d.fromDegrees(0), 1),
-                                feeder.waitForDetectionState(true, 20)),
+                        arm.setAngle(Rotation2d.fromDegrees(0)),
+                        feeder.waitForDetectionState(true, 20),
                         Commands.waitSeconds(0.25),
                         intake.stop(),
                         feeder.stop())
