@@ -20,7 +20,9 @@ public class Intake extends SubsystemBase {
     }
 
     public Command setSpeed(double percent) {
-        return Commands.runOnce(() -> io.setPercent(percent), this);
+        return Commands.runOnce(
+            () -> io.setPercent(percent)
+            , this);
     }
 
     public Command intake() {

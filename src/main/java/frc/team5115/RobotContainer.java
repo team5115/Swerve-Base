@@ -232,7 +232,7 @@ public class RobotContainer {
                 Commands.sequence(
                                 arm.setAngle(Rotation2d.fromDegrees(0)),
                                 feeder.centerNote(),
-                                feeder.waitForDetectionState(true, 3),
+                                feeder.waitForDetectionState(true, 1.5),
                                 Commands.waitSeconds(0.25),
                                 feeder.stop())
                         .withInterruptBehavior(InterruptionBehavior.kCancelSelf));
@@ -242,7 +242,7 @@ public class RobotContainer {
 
         // TODO determine angles for medium and far
         NamedCommands.registerCommand("ArmForNear", arm.goToAngle(Rotation2d.fromDegrees(15), 1));
-        NamedCommands.registerCommand("ArmForMedium", arm.goToAngle(Rotation2d.fromDegrees(40), 1));
+        NamedCommands.registerCommand("ArmForMedium", arm.goToAngle(Rotation2d.fromDegrees(20), 1));
         NamedCommands.registerCommand("ArmForFar", arm.goToAngle(Rotation2d.fromDegrees(50), 1));
     }
 

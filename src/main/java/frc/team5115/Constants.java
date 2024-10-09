@@ -50,7 +50,7 @@ public final class Constants {
         public static final byte BACK_LEFT_TURN_ID = 23;
         public static final byte BACK_RIGHT_TURN_ID = 25;
 
-        public static final double MAX_LINEAR_SPEED = 4.8; // meters per second
+        public static final double MAX_LINEAR_SPEED = 1.2; // meters per second
         public static final double TRACK_WIDTH_X = Units.inchesToMeters(23.75);
         public static final double TRACK_WIDTH_Y = Units.inchesToMeters(23.75);
         public static final double DRIVE_BASE_RADIUS =
