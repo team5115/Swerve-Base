@@ -23,8 +23,10 @@ public class ArmIOSim implements ArmIO {
         arm.update(Constants.LOOP_PERIOD_SECS);
 
         inputs.armAngle = Rotation2d.fromRadians(arm.getAngleRads());
-        inputs.armAppliedVolts = voltage;
-        inputs.armCurrentAmps = arm.getCurrentDrawAmps();
+        inputs.leftAppliedVolts = voltage;
+        inputs.rightAppliedVolts = voltage;
+        inputs.leftCurrentAmps = arm.getCurrentDrawAmps();
+        inputs.rightCurrentAmps = arm.getCurrentDrawAmps();
         inputs.armVelocityRPM = arm.getVelocityRadPerSec() * 60.0;
     }
 
