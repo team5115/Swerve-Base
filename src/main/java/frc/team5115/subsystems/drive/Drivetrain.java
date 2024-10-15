@@ -7,6 +7,9 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,9 +18,11 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.team5115.Constants.SwerveConstants;
@@ -141,6 +146,24 @@ public class Drivetrain extends SubsystemBase {
 
         // Apply odometry update
         poseEstimator.update(rawGyroRotation, modulePositions);
+    }
+
+    private final PIDController anglePid = new ProfiledPIDController(0.0025, 0, 0, );
+    private final PIDController xPid = new PIDController(0.17, 0, 0);
+    private final PIDController yPid = new PIDController(0.17, 0, 0);
+
+    public Command faceSpeaker() {
+        return setAutoAimPids().andThen(
+            Commands.run(() -> {
+                anglePid.
+        }, this));
+    }
+
+    private Command setAutoAimPids() {
+        return Commands.runOnce(() -> {
+            
+            anglePid.setSetpoint();
+        }, this);
     }
 
     public boolean isRedAlliance() {
