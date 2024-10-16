@@ -194,6 +194,12 @@ public class RobotContainer {
                 .x()
                 .onTrue(DriveCommands.prepareAmp(arm, amper, intake, feeder))
                 .onFalse(DriveCommands.triggerAmp(arm, amper, intake, feeder));
+
+        joyManip
+                .leftBumper()
+                .onTrue(
+                        DriveCommands.automaticallyPrepareShoot(drivetrain, arm, intake, feeder, shooter)
+                                .andThen(DriveCommands.feed(intake, feeder)));
     }
 
     public void robotPeriodic() {

@@ -9,7 +9,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import frc.team5115.Constants.SwerveConstants;
 import frc.team5115.subsystems.amper.Amper;
 import frc.team5115.subsystems.arm.Arm;
@@ -24,27 +23,12 @@ public class DriveCommands {
 
     private DriveCommands() {}
 
-    public static Command automaticallyPrepareShoot(Drivetrain drivetrain, Arm arm, Intake intake, Feeder feeder, Shooter shooter) {
-        return new FunctionalCommand(
-            () -> {
-                // init
-            }, 
-            () -> {
-                // execute
-            },
-            (Boolean interrupted) -> {
-                // end
-            },
-            () -> {
-                // isFinished
-                return false;
-            },
-            drivetrain, arm
-        ).alongWith(
-            intake.stop(),
-            feeder.stop(),
-            shooter.spinToSpeed(5000)
-        ).withInterruptBehavior(InterruptionBehavior.kCancelSelf);
+    public static Command automaticallyPrepareShoot(
+            Drivetrain drivetrain, Arm arm, Intake intake, Feeder feeder, Shooter shooter) {
+        return drivetrain
+                .faceSpeaker()
+                .alongWith(prepareShoot(arm, intake, feeder, shooter, 35.0, 5000))
+                .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
     public static Command intakeUntilNote(Arm arm, Intake intake, Feeder feeder) {
