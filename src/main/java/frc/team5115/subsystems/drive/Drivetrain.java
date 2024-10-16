@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.team5115.Constants;
 import frc.team5115.Constants.SwerveConstants;
 import frc.team5115.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -48,9 +49,10 @@ public class Drivetrain extends SubsystemBase {
     private final SwerveDrivePoseEstimator poseEstimator =
             new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
-    private final PIDController anglePid = new PIDController(0.0025, 0, 0);
-    private final PIDController xPid = new PIDController(0.17, 0, 0);
-    private final PIDController yPid = new PIDController(0.17, 0, 0);
+    private final PIDController anglePid =
+            new PIDController(1.400 * SwerveConstants.MAX_ANGULAR_SPEED, 0, 0);
+    private final PIDController xPid = new PIDController(2.0, 0, 0);
+    private final PIDController yPid = new PIDController(2.0, 0, 0);
 
     public Drivetrain(
             GyroIO gyroIO,
@@ -160,23 +162,34 @@ public class Drivetrain extends SubsystemBase {
     }
 
     private Command driveByAutoAimPids() {
-        return Commands.run(
+        return Commands.runEnd(
                 () -> {
                     final var omega = anglePid.calculate(getPose().getRotation().getRadians());
                     final var xVelocity = xPid.calculate(getPose().getX());
                     final var yVelocity = yPid.calculate(getPose().getY());
+
+                    Logger.recordOutput("AutoAim/xVelocity", xVelocity);
+                    Logger.recordOutput("AutoAim/yVelocity", yVelocity);
+                    Logger.recordOutput("AutoAim/omega", omega);
+                    Logger.recordOutput(
+                            "AutoAim/Setpoint", new Translation2d(xPid.getSetpoint(), yPid.getSetpoint()));
+
                     runVelocity(
                             ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, omega, getRotation()));
                 },
+                this::stop,
                 this);
     }
 
     private Command setAutoAimPids() {
         return Commands.runOnce(
                 () -> {
-                    // TODO determine position of speaker april tag in our coordinate system
-                    final var speakerX = Meters.of(isRedAlliance() ? 0 : 0);
-                    final var speakerY = Meters.of(isRedAlliance() ? 0 : 0);
+                    double blueSpeakerXMeters = 0.508;
+                    if (isRedAlliance()) {
+                        blueSpeakerXMeters = Constants.FIELD_WIDTH_METERS - blueSpeakerXMeters;
+                    }
+                    final var speakerX = Meters.of(blueSpeakerXMeters);
+                    final var speakerY = Meters.of(5.536);
                     final var distanceForShot = Feet.of(10);
                     final Translation2d speaker = new Translation2d(speakerX, speakerY);
                     final Translation2d robot = getPose().getTranslation();
