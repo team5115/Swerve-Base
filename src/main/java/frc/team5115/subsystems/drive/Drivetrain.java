@@ -50,7 +50,7 @@ public class Drivetrain extends SubsystemBase {
             new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
     private final PIDController anglePid =
-            new PIDController(1.400 * SwerveConstants.MAX_ANGULAR_SPEED, 0, 0);
+            new PIDController(1.2 * SwerveConstants.MAX_ANGULAR_SPEED, 0, 0);
     private final PIDController xPid = new PIDController(2.0, 0, 0);
     private final PIDController yPid = new PIDController(2.0, 0, 0);
 
@@ -203,7 +203,7 @@ public class Drivetrain extends SubsystemBase {
                     final double deltaY = moveDelta * theta.getSin();
                     final double setpointX = robot.getX() + deltaX;
                     final double setpointY = robot.getY() + deltaY;
-                    anglePid.setSetpoint(theta.getRadians());
+                    anglePid.setSetpoint(theta.plus(Rotation2d.fromDegrees(180)).getRadians());
                     xPid.setSetpoint(setpointX);
                     yPid.setSetpoint(setpointY);
                 },
