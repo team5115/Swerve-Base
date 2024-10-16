@@ -200,7 +200,7 @@ public class RobotContainer {
                 .leftBumper()
                 .onTrue(
                         DriveCommands.automaticallyPrepareShoot(drivetrain, arm, intake, feeder, shooter)
-                                .andThen(DriveCommands.feed(intake, feeder)));
+                                .andThen(DriveCommands.feed(intake, feeder), shooter.stop()));
     }
 
     public void robotPeriodic() {

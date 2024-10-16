@@ -27,7 +27,7 @@ public class DriveCommands {
             Drivetrain drivetrain, Arm arm, Intake intake, Feeder feeder, Shooter shooter) {
         return drivetrain
                 .faceSpeaker()
-                .alongWith(prepareShoot(arm, intake, feeder, shooter, 35.0, 5000))
+                .alongWith(prepareShoot(arm, intake, feeder, shooter, 30.0, 5000))
                 .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
