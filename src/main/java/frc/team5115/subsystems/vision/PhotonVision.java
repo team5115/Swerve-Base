@@ -25,10 +25,7 @@ public class PhotonVision extends SubsystemBase {
         fieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
         poseEstimator =
                 new PhotonPoseEstimator(
-                        fieldLayout,
-                        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                        camera,
-                        VisionConstants.robotToCam);
+                        fieldLayout, PoseStrategy.LOWEST_AMBIGUITY, camera, VisionConstants.robotToCam);
     }
 
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {

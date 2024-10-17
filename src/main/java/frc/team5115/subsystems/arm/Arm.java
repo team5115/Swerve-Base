@@ -23,7 +23,7 @@ public class Arm extends SubsystemBase {
             case REAL:
             case REPLAY:
                 feedforward = new ArmFeedforward(0.3, 0.35, 0.13509, 0.048686);
-                pid = new PIDController(0.425, 0.0, 0.0);
+                pid = new PIDController(0.405, 0.0, 0.0);
                 break;
             case SIM:
                 feedforward = new ArmFeedforward(0.0, 0.35, 0.1351, 0.0);
