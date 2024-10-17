@@ -23,6 +23,14 @@ public class DriveCommands {
 
     private DriveCommands() {}
 
+    public static Command automaticallyPrepareShoot(
+            Drivetrain drivetrain, Arm arm, Intake intake, Feeder feeder, Shooter shooter) {
+        return drivetrain
+                .faceSpeaker()
+                .alongWith(prepareShoot(arm, intake, feeder, shooter, 30.0, 5000))
+                .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
+    }
+
     public static Command intakeUntilNote(Arm arm, Intake intake, Feeder feeder) {
         return Commands.sequence(
                         intake.intake(),
