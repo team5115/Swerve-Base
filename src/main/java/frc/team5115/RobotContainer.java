@@ -168,7 +168,7 @@ public class RobotContainer {
                         () -> -joyDrive.getRightX()));
 
         // joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
-        joyDrive.start().onTrue(resetRobotPose());
+        joyDrive.start().onTrue(resetFieldOrientation());
 
         joyManip
                 .back()
@@ -232,7 +232,7 @@ public class RobotContainer {
                                 arm.setAngle(Rotation2d.fromDegrees(15)),
                                 intake.setSpeed(+1),
                                 shooter.spinToSpeed(5000))
-                        .andThen(feeder.setSpeeds(+1)));
+                        .andThen(feeder.setSpeeds(+1), Commands.waitSeconds(0.5)));
 
         NamedCommands.registerCommand(
                 "Intake",
@@ -247,10 +247,9 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "Feed", Commands.sequence(feeder.setSpeeds(+1), Commands.waitSeconds(0.5), feeder.stop()));
 
-        // TODO determine angles for medium and far
         NamedCommands.registerCommand("ArmForNear", arm.goToAngle(Rotation2d.fromDegrees(15), 1));
-        NamedCommands.registerCommand("ArmForMedium", arm.goToAngle(Rotation2d.fromDegrees(20), 1));
-        NamedCommands.registerCommand("ArmForFar", arm.goToAngle(Rotation2d.fromDegrees(50), 1));
+        NamedCommands.registerCommand("ArmForMedium", arm.goToAngle(Rotation2d.fromDegrees(15), 1));
+        NamedCommands.registerCommand("ArmForFar", arm.goToAngle(Rotation2d.fromDegrees(25), 1));
     }
 
     /**

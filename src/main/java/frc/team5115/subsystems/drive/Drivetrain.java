@@ -8,6 +8,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -47,12 +48,20 @@ public class Drivetrain extends SubsystemBase {
                 new SwerveModulePosition()
             };
     private final SwerveDrivePoseEstimator poseEstimator =
-            new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+            new SwerveDrivePoseEstimator(
+                    kinematics,
+                    rawGyroRotation,
+                    lastModulePositions,
+                    new Pose2d(),
+                    VecBuilder.fill(0.1, 0.1, 0.1),
+                    VecBuilder.fill(0.9, 0.9, 0.9));
 
+    private final double lateralConstantP = 1.9;
+    private final double angleConstantP = 0.7;
     private final PIDController anglePid =
-            new PIDController(1.2 * SwerveConstants.MAX_ANGULAR_SPEED, 0, 0);
-    private final PIDController xPid = new PIDController(2.0, 0, 0);
-    private final PIDController yPid = new PIDController(2.0, 0, 0);
+            new PIDController(angleConstantP * SwerveConstants.MAX_ANGULAR_SPEED, 0, 0);
+    private final PIDController xPid = new PIDController(lateralConstantP, 0, 0);
+    private final PIDController yPid = new PIDController(lateralConstantP, 0, 0);
 
     public Drivetrain(
             GyroIO gyroIO,
@@ -184,7 +193,7 @@ public class Drivetrain extends SubsystemBase {
     private Command setAutoAimPids() {
         return Commands.runOnce(
                 () -> {
-                    double blueSpeakerXMeters = 0.508;
+                    double blueSpeakerXMeters = 0.96;
                     if (isRedAlliance()) {
                         blueSpeakerXMeters = Constants.FIELD_WIDTH_METERS - blueSpeakerXMeters;
                     }

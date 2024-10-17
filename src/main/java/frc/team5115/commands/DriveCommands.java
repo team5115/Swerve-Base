@@ -27,7 +27,7 @@ public class DriveCommands {
             Drivetrain drivetrain, Arm arm, Intake intake, Feeder feeder, Shooter shooter) {
         return drivetrain
                 .faceSpeaker()
-                .alongWith(prepareShoot(arm, intake, feeder, shooter, 30.0, 5000))
+                .alongWith(prepareShoot(arm, intake, feeder, shooter, 25, 5000))
                 .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
@@ -45,7 +45,7 @@ public class DriveCommands {
 
     public static Command prepareAmp(Arm arm, Amper amper, Intake intake, Feeder feeder) {
         return Commands.sequence(
-                        arm.goToAngle(Rotation2d.fromDegrees(103.5), 1),
+                        arm.goToAngle(Rotation2d.fromDegrees(98.0), 1),
                         amper.spinToAngle(new Rotation2d(3.25)),
                         intake.setSpeed(1),
                         feeder.setSpeeds(0.25),
@@ -57,7 +57,7 @@ public class DriveCommands {
 
     public static Command triggerAmp(Arm arm, Amper amper, Intake intake, Feeder feeder) {
         return Commands.sequence(
-                        intake.setSpeed(-0.9),
+                        intake.setSpeed(-1),
                         feeder.setSpeeds(-1),
                         feeder.waitForDetectionState(true, 1),
                         feeder.waitForDetectionState(false, 1),
