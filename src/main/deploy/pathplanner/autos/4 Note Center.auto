@@ -5,7 +5,7 @@
       "x": 1.35,
       "y": 5.55
     },
-    "rotation": 0
+    "rotation": -2.889096402350552e-26
   },
   "command": {
     "type": "sequential",
@@ -47,7 +47,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "TopShoot"
+                        "pathName": "ShootTop"
                       }
                     },
                     {
@@ -98,7 +98,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "TopShoot"
+                        "pathName": "ShootBottom"
                       }
                     },
                     {
@@ -130,7 +130,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "IntakeShootMid"
+                        "pathName": "MidNote"
                       }
                     },
                     {
@@ -146,57 +146,6 @@
                 "type": "parallel",
                 "data": {
                   "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "ArmForFar"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Feed"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "race",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "IntakeBackTop"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Intake"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "parallel",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "ShootBackTop"
-                      }
-                    },
                     {
                       "type": "named",
                       "data": {
@@ -219,5 +168,5 @@
     }
   },
   "folder": null,
-  "choreoAuto": false
+  "choreoAuto": true
 }
