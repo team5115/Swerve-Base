@@ -4,6 +4,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -167,7 +168,7 @@ public class RobotContainer {
                         () -> -joyDrive.getRightX()));
 
         // joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
-        joyDrive.start().onTrue(resetFieldOrientation());
+        joyDrive.start().onTrue(resetRobotPose());
 
         joyManip
                 .back()
@@ -194,6 +195,12 @@ public class RobotContainer {
                 .x()
                 .onTrue(DriveCommands.prepareAmp(arm, amper, intake, feeder))
                 .onFalse(DriveCommands.triggerAmp(arm, amper, intake, feeder));
+
+        joyManip
+                .leftBumper()
+                .onTrue(
+                        DriveCommands.automaticallyPrepareShoot(drivetrain, arm, intake, feeder, shooter)
+                                .andThen(DriveCommands.feed(intake, feeder), shooter.stop()));
     }
 
     public void robotPeriodic() {
@@ -232,7 +239,7 @@ public class RobotContainer {
                 Commands.sequence(
                                 arm.setAngle(Rotation2d.fromDegrees(0)),
                                 feeder.centerNote(),
-                                feeder.waitForDetectionState(true, 3),
+                                feeder.waitForDetectionState(true, 1.5),
                                 Commands.waitSeconds(0.25),
                                 feeder.stop())
                         .withInterruptBehavior(InterruptionBehavior.kCancelSelf));
@@ -242,7 +249,7 @@ public class RobotContainer {
 
         // TODO determine angles for medium and far
         NamedCommands.registerCommand("ArmForNear", arm.goToAngle(Rotation2d.fromDegrees(15), 1));
-        NamedCommands.registerCommand("ArmForMedium", arm.goToAngle(Rotation2d.fromDegrees(40), 1));
+        NamedCommands.registerCommand("ArmForMedium", arm.goToAngle(Rotation2d.fromDegrees(20), 1));
         NamedCommands.registerCommand("ArmForFar", arm.goToAngle(Rotation2d.fromDegrees(50), 1));
     }
 
@@ -260,6 +267,20 @@ public class RobotContainer {
                         () ->
                                 drivetrain.setPose(
                                         new Pose2d(drivetrain.getPose().getTranslation(), new Rotation2d())),
+                        drivetrain)
+                .ignoringDisable(true);
+    }
+
+    private Command resetRobotPose() {
+        return Commands.runOnce(
+                        () -> {
+                            drivetrain.setPose(
+                                    new Pose2d(
+                                            new Translation2d(
+                                                    drivetrain.isRedAlliance() ? Constants.FIELD_WIDTH_METERS - 1.35 : 1.35,
+                                                    5.55),
+                                            new Rotation2d()));
+                        },
                         drivetrain)
                 .ignoringDisable(true);
     }

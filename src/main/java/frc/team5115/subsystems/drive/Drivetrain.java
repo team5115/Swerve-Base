@@ -7,9 +7,12 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -18,8 +21,10 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.team5115.Constants;
 import frc.team5115.Constants.SwerveConstants;
 import frc.team5115.util.LocalADStarAK;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -44,6 +49,11 @@ public class Drivetrain extends SubsystemBase {
     private final SwerveDrivePoseEstimator poseEstimator =
             new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
+    private final PIDController anglePid =
+            new PIDController(1.2 * SwerveConstants.MAX_ANGULAR_SPEED, 0, 0);
+    private final PIDController xPid = new PIDController(2.0, 0, 0);
+    private final PIDController yPid = new PIDController(2.0, 0, 0);
+
     public Drivetrain(
             GyroIO gyroIO,
             ModuleIO flModuleIO,
@@ -55,6 +65,8 @@ public class Drivetrain extends SubsystemBase {
         modules[1] = new Module(frModuleIO, 1);
         modules[2] = new Module(blModuleIO, 2);
         modules[3] = new Module(brModuleIO, 3);
+
+        anglePid.enableContinuousInput(-Math.PI, Math.PI);
 
         // Configure AutoBuilder for PathPlanner
         AutoBuilder.configureHolonomic(
@@ -141,6 +153,61 @@ public class Drivetrain extends SubsystemBase {
 
         // Apply odometry update
         poseEstimator.update(rawGyroRotation, modulePositions);
+    }
+
+    public Command faceSpeaker() {
+        return setAutoAimPids()
+                .andThen(driveByAutoAimPids())
+                .until(() -> anglePid.atSetpoint() && xPid.atSetpoint() && yPid.atSetpoint());
+    }
+
+    private Command driveByAutoAimPids() {
+        return Commands.runEnd(
+                () -> {
+                    final var omega = anglePid.calculate(getPose().getRotation().getRadians());
+                    final var xVelocity = xPid.calculate(getPose().getX());
+                    final var yVelocity = yPid.calculate(getPose().getY());
+
+                    Logger.recordOutput("AutoAim/xVelocity", xVelocity);
+                    Logger.recordOutput("AutoAim/yVelocity", yVelocity);
+                    Logger.recordOutput("AutoAim/omega", omega);
+                    Logger.recordOutput(
+                            "AutoAim/Setpoint", new Translation2d(xPid.getSetpoint(), yPid.getSetpoint()));
+
+                    runVelocity(
+                            ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, omega, getRotation()));
+                },
+                this::stop,
+                this);
+    }
+
+    private Command setAutoAimPids() {
+        return Commands.runOnce(
+                () -> {
+                    double blueSpeakerXMeters = 0.508;
+                    if (isRedAlliance()) {
+                        blueSpeakerXMeters = Constants.FIELD_WIDTH_METERS - blueSpeakerXMeters;
+                    }
+                    final var speakerX = Meters.of(blueSpeakerXMeters);
+                    final var speakerY = Meters.of(5.536);
+                    final var distanceForShot = Feet.of(10);
+                    final Translation2d speaker = new Translation2d(speakerX, speakerY);
+                    final Translation2d robot = getPose().getTranslation();
+                    final Translation2d robotToSpeaker = speaker.minus(robot);
+                    final double distanceToSpeaker = robot.getDistance(speaker);
+                    final double moveDelta = distanceToSpeaker - distanceForShot.in(Meter);
+                    final Rotation2d theta =
+                            Rotation2d.fromRadians(
+                                    MathUtil.angleModulus(Math.atan2(robotToSpeaker.getY(), robotToSpeaker.getX())));
+                    final double deltaX = moveDelta * theta.getCos();
+                    final double deltaY = moveDelta * theta.getSin();
+                    final double setpointX = robot.getX() + deltaX;
+                    final double setpointY = robot.getY() + deltaY;
+                    anglePid.setSetpoint(theta.plus(Rotation2d.fromDegrees(180)).getRadians());
+                    xPid.setSetpoint(setpointX);
+                    yPid.setSetpoint(setpointY);
+                },
+                this);
     }
 
     public boolean isRedAlliance() {

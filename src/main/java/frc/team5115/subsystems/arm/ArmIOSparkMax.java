@@ -30,11 +30,14 @@ public class ArmIOSparkMax implements ArmIO {
     @Override
     public void updateInputs(ArmIOInputs inputs) {
         inputs.armVelocityRPM = absoluteEncoder.getVelocity() * 60.0;
-        inputs.armAngle = Rotation2d.fromDegrees(absoluteEncoder.getPosition() - 8.40);
-        inputs.armCurrentAmps = (leftMotor.getOutputCurrent() + rightMotor.getOutputCurrent()) / 2.0;
-        inputs.armAppliedVolts =
-                (leftMotor.getAppliedOutput() * leftMotor.getBusVoltage()
-                                + rightMotor.getAppliedOutput() * rightMotor.getBusVoltage())
-                        / 2.0;
+        if (absoluteEncoder.getPosition() > 160) {
+            inputs.armAngle = Rotation2d.fromDegrees(absoluteEncoder.getPosition() - 180.0);
+        } else {
+            inputs.armAngle = Rotation2d.fromDegrees(absoluteEncoder.getPosition());
+        }
+        inputs.leftCurrentAmps = leftMotor.getOutputCurrent();
+        inputs.rightCurrentAmps = rightMotor.getOutputCurrent();
+        inputs.leftAppliedVolts = leftMotor.getAppliedOutput() * leftMotor.getBusVoltage();
+        inputs.rightAppliedVolts = rightMotor.getAppliedOutput() * rightMotor.getBusVoltage();
     }
 }
