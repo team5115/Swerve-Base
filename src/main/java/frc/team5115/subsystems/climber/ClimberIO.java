@@ -1,8 +1,7 @@
 package frc.team5115.subsystems.climber;
 
-import org.littletonrobotics.junction.AutoLog;
-
 import edu.wpi.first.math.geometry.Rotation2d;
+import org.littletonrobotics.junction.AutoLog;
 
 public interface ClimberIO {
     @AutoLog
@@ -19,5 +18,7 @@ public interface ClimberIO {
 
     public default void updateInputs(ClimberIOInputs inputs) {}
 
-    public default void setClimberVoltages(double leftVoltage, double rightVoltage) {}
+    public default void setLeftPercent(double speed) {}
+
+    public default void setRightPercent(double speed) {}
 }

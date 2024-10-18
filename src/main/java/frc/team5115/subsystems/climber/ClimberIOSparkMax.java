@@ -4,9 +4,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DigitalInput;
 import frc.team5115.Constants;
 
 public class ClimberIOSparkMax implements ClimberIO {
@@ -18,13 +16,13 @@ public class ClimberIOSparkMax implements ClimberIO {
 
     public ClimberIOSparkMax() {
         leftClimb = new CANSparkMax(Constants.CLIMBER_LEFT_MOTOR_ID, MotorType.kBrushless);
-        // left climber is inverted!
-        leftClimb.setInverted(true);
+
+        leftClimb.setInverted(true); // ! Left side inverted
         leftClimb.setIdleMode(IdleMode.kBrake);
         leftClimb.setSmartCurrentLimit(45);
 
         rightClimb = new CANSparkMax(Constants.CLIMBER_RIGHT_MOTOR_ID, MotorType.kBrushless);
-        rightClimb.setInverted(true);
+        rightClimb.setInverted(false);
         rightClimb.setIdleMode(IdleMode.kBrake);
         rightClimb.setSmartCurrentLimit(45);
 
@@ -37,8 +35,8 @@ public class ClimberIOSparkMax implements ClimberIO {
 
     @Override
     public void updateInputs(ClimberIOInputs inputs) {
-        inputs.leftAngle = Rotation2d.fromDegrees(leftClimbEncoder.getPosition());
-        inputs.rightAngle = Rotation2d.fromDegrees(rightClimbEncoder.getPosition());
+        inputs.leftAngle = Rotation2d.fromRotations(leftClimbEncoder.getPosition());
+        inputs.rightAngle = Rotation2d.fromRotations(rightClimbEncoder.getPosition());
         inputs.leftVelocityRPM = leftClimbEncoder.getVelocity();
         inputs.rightVelocityRPM = rightClimbEncoder.getVelocity();
         inputs.leftCurrentAmps = leftClimb.getOutputCurrent();
@@ -48,8 +46,12 @@ public class ClimberIOSparkMax implements ClimberIO {
     }
 
     @Override
-    public void setClimberVoltages(double leftVoltage, double rightVoltage) {
-        leftClimb.setVoltage(leftVoltage);
-        rightClimb.setVoltage(rightVoltage);
+    public void setLeftPercent(double speed) {
+        leftClimb.set(speed);
+    }
+
+    @Override
+    public void setRightPercent(double speed) {
+        rightClimb.set(speed);
     }
 }

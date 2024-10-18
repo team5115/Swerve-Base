@@ -23,6 +23,11 @@ public class DriveCommands {
 
     private DriveCommands() {}
 
+    public static Command stow(Arm arm, Intake intake, Feeder feeder, Shooter shooter) {
+        return Commands.parallel(arm.stow(), shooter.stop(), feeder.stop(), intake.stop())
+                .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
+    }
+
     public static Command automaticallyPrepareShoot(
             Drivetrain drivetrain, Arm arm, Intake intake, Feeder feeder, Shooter shooter) {
         return drivetrain

@@ -1,50 +1,63 @@
 package frc.team5115.subsystems.climber;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team5115.Constants;
+import frc.team5115.commands.DeployClimber;
+import java.util.function.DoubleSupplier;
+import org.littletonrobotics.junction.Logger;
 
 public class Climber extends SubsystemBase {
     private final ClimberIO io;
     private final ClimberIOInputsAutoLogged inputs = new ClimberIOInputsAutoLogged();
-    // TODO set pid values
-    private final PIDController leftPid;
-    private final PIDController rightPid;
+
+    // Doesn't actually check if the climber has been deployed, just reports if the command has been
+    // run since bootup
+    private boolean deployed = false;
 
     public Climber(ClimberIO io) {
         this.io = io;
-        
-        switch (Constants.currentMode) {
-            case REAL:
-            case REPLAY:
-                leftPid = new PIDController(0.0, 0.0, 0.0);
-                rightPid = new PIDController(0.0, 0.0, 0.0);
-                break;
-            case SIM:
-                leftPid = new PIDController(0.5, 0.0, 0.0);
-                rightPid = new PIDController(0.5, 0.0, 0.0);
-                break;
-            default:
-                leftPid = new PIDController(0.0, 0.0, 0.0);
-                rightPid = new PIDController(0.0, 0.0, 0.0);
-                break;
-        }
     }
 
     @Override
     public void periodic() {
         io.updateInputs(inputs);
+        Logger.processInputs("Climber", inputs);
+        Logger.recordOutput("Climber/IsDeployed?", deployed);
     }
 
-    public Command moveClimberByDelta(double delta) {
-        return Commands.runOnce(() -> {
-            leftPid.setSetpoint(leftPid.getSetpoint() + delta);
-            rightPid.setSetpoint(rightPid.getSetpoint() + delta);
-        }, this).andThen(Commands.run(() -> {
-            leftPid.calculate(inputs.leftAngle.getDegrees());
-            rightPid.calculate(inputs.rightAngle.getDegrees());
-        }, this));
+    public Command deploy() {
+        return new DeployClimber(this, +1);
+    }
+
+    public Command climbBy(DoubleSupplier speed) {
+        return Commands.run(
+                () -> {
+                    if (isDeployed()) {
+                        setPercents(speed.getAsDouble() * 0.3);
+                    }
+                },
+                this);
+    }
+
+    public void setPercents(double speed) {
+        io.setLeftPercent(speed);
+        io.setRightPercent(speed);
+    }
+
+    public void stop() {
+        setPercents(0);
+    }
+
+    public boolean isDeployed() {
+        return deployed;
+    }
+
+    public void setDeployed() {
+        deployed = true;
+    }
+
+    public double[] getRotations() {
+        return new double[] {inputs.leftAngle.getRotations(), inputs.rightAngle.getRotations()};
     }
 }

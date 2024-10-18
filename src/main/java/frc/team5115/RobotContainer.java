@@ -20,6 +20,10 @@ import frc.team5115.subsystems.arm.Arm;
 import frc.team5115.subsystems.arm.ArmIO;
 import frc.team5115.subsystems.arm.ArmIOSim;
 import frc.team5115.subsystems.arm.ArmIOSparkMax;
+import frc.team5115.subsystems.climber.Climber;
+import frc.team5115.subsystems.climber.ClimberIO;
+import frc.team5115.subsystems.climber.ClimberIOSim;
+import frc.team5115.subsystems.climber.ClimberIOSparkMax;
 import frc.team5115.subsystems.drive.Drivetrain;
 import frc.team5115.subsystems.drive.GyroIO;
 import frc.team5115.subsystems.drive.GyroIONavx;
@@ -57,6 +61,7 @@ public class RobotContainer {
     private final Intake intake;
     private final Feeder feeder;
     private final Shooter shooter;
+    private final Climber climber;
 
     // Controller
     private final CommandXboxController joyDrive = new CommandXboxController(0);
@@ -79,6 +84,7 @@ public class RobotContainer {
                 intake = new Intake(new IntakeIOSparkMax());
                 feeder = new Feeder(new FeederIOSparkMax());
                 shooter = new Shooter(new ShooterIOSparkMax());
+                climber = new Climber(new ClimberIOSparkMax());
                 drivetrain =
                         new Drivetrain(
                                 gyro,
@@ -100,6 +106,7 @@ public class RobotContainer {
                 intake = new Intake(new IntakeIOSim());
                 feeder = new Feeder(new FeederIOSim());
                 shooter = new Shooter(new ShooterIOSim());
+                climber = new Climber(new ClimberIOSim());
                 drivetrain =
                         new Drivetrain(
                                 gyro, new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim());
@@ -115,6 +122,7 @@ public class RobotContainer {
                 intake = new Intake(new IntakeIO() {});
                 feeder = new Feeder(new FeederIO() {});
                 shooter = new Shooter(new ShooterIO() {});
+                climber = new Climber(new ClimberIO() {});
                 drivetrain =
                         new Drivetrain(
                                 gyro, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
@@ -130,11 +138,12 @@ public class RobotContainer {
         // Set up auto routines
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-        autoChooser.addOption("One note auto (manual)", Commands.sequence(
-            DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, 0),
-            DriveCommands.feed(intake, feeder),
-            shooter.stop()
-        ));
+        autoChooser.addOption(
+                "One note auto (manual)",
+                Commands.sequence(
+                        DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, 5000),
+                        DriveCommands.feed(intake, feeder),
+                        shooter.stop()));
 
         // Set up SysId routines
         // autoChooser.addOption(
@@ -166,6 +175,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
+        // drive control
         drivetrain.setDefaultCommand(
                 DriveCommands.joystickDrive(
                         drivetrain,
@@ -173,8 +183,23 @@ public class RobotContainer {
                         () -> -joyDrive.getLeftX(),
                         () -> -joyDrive.getRightX()));
 
-        // joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
+        joyDrive.x().onTrue(Commands.runOnce(drivetrain::stopWithX, drivetrain));
+
         joyDrive.start().onTrue(resetFieldOrientation());
+
+        // manip control
+        climber.setDefaultCommand(climber.climbBy(() -> joyManip.getLeftY()));
+
+        joyManip.rightBumper().onTrue(climber.deploy());
+
+        joyManip
+                .leftBumper()
+                .onTrue(
+                        Commands.sequence(
+                                DriveCommands.automaticallyPrepareShoot(drivetrain, arm, intake, feeder, shooter),
+                                DriveCommands.feed(intake, feeder),
+                                shooter.stop()))
+                .onFalse(DriveCommands.stow(arm, intake, feeder, shooter));
 
         joyManip
                 .back()
@@ -183,11 +208,7 @@ public class RobotContainer {
 
         joyManip.a().onTrue(DriveCommands.intakeUntilNote(arm, intake, feeder));
 
-        joyManip
-                .y()
-                .onTrue(
-                        Commands.parallel(arm.stow(), shooter.stop(), feeder.stop(), intake.stop())
-                                .withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+        joyManip.y().onTrue(DriveCommands.stow(arm, intake, feeder, shooter));
 
         joyManip
                 .b()
@@ -201,12 +222,6 @@ public class RobotContainer {
                 .x()
                 .onTrue(DriveCommands.prepareAmp(arm, amper, intake, feeder))
                 .onFalse(DriveCommands.triggerAmp(arm, amper, intake, feeder));
-
-        joyManip
-                .leftBumper()
-                .onTrue(
-                        DriveCommands.automaticallyPrepareShoot(drivetrain, arm, intake, feeder, shooter)
-                                .andThen(DriveCommands.feed(intake, feeder), shooter.stop()));
     }
 
     public void robotPeriodic() {
