@@ -130,6 +130,12 @@ public class RobotContainer {
         // Set up auto routines
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
+        autoChooser.addOption("One note auto (manual)", Commands.sequence(
+            DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, 0),
+            DriveCommands.feed(intake, feeder),
+            shooter.stop()
+        ));
+
         // Set up SysId routines
         // autoChooser.addOption(
         //         "Drive SysId (Quasistatic Forward)",
