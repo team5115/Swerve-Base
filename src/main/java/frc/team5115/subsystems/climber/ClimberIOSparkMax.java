@@ -16,19 +16,16 @@ public class ClimberIOSparkMax implements ClimberIO {
 
     public ClimberIOSparkMax() {
         leftClimb = new CANSparkMax(Constants.CLIMBER_LEFT_MOTOR_ID, MotorType.kBrushless);
-
-        leftClimb.setInverted(true); // ! Left side inverted
+        leftClimb.setInverted(true);
         leftClimb.setIdleMode(IdleMode.kBrake);
         leftClimb.setSmartCurrentLimit(45);
+        leftClimbEncoder = leftClimb.getEncoder();
+        leftClimbEncoder.setPositionConversionFactor(1.0 / 16.0);
 
         rightClimb = new CANSparkMax(Constants.CLIMBER_RIGHT_MOTOR_ID, MotorType.kBrushless);
         rightClimb.setInverted(false);
         rightClimb.setIdleMode(IdleMode.kBrake);
         rightClimb.setSmartCurrentLimit(45);
-
-        leftClimbEncoder = leftClimb.getEncoder();
-        leftClimbEncoder.setPositionConversionFactor(1.0 / 16.0);
-
         rightClimbEncoder = rightClimb.getEncoder();
         rightClimbEncoder.setPositionConversionFactor(1.0 / 16.0);
     }

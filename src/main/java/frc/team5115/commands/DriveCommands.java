@@ -85,10 +85,14 @@ public class DriveCommands {
     }
 
     public static Command feed(Intake intake, Feeder feeder) {
+        return feed(intake, feeder, 0.5);
+    }
+
+    public static Command feed(Intake intake, Feeder feeder, double time) {
         return Commands.sequence(
                 feeder.setSpeeds(+1),
                 intake.setSpeed(+1),
-                Commands.waitSeconds(0.5),
+                Commands.waitSeconds(time),
                 feeder.stop(),
                 intake.stop());
     }

@@ -15,6 +15,7 @@ public class AmperIOSparkMax implements AmperIO {
         motor = new CANSparkMax(Constants.SNOWBLOWER_MOTOR_ID, MotorType.kBrushed);
         encoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
         encoder.setPositionConversionFactor(360);
+        motor.setSmartCurrentLimit(20);
     }
 
     @Override

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.793,
-      "y": 4.423592567443848
+      "x": 1.3500000000000003,
+      "y": 5.55
     },
-    "rotation": -56.97610629838843
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -22,13 +22,19 @@
           "data": {
             "commands": [
               {
+                "type": "named",
+                "data": {
+                  "name": "LowerArmForIntake"
+                }
+              },
+              {
                 "type": "race",
                 "data": {
                   "commands": [
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "IntakeBottom(Side)"
+                        "pathName": "IntakeMid"
                       }
                     },
                     {
@@ -47,7 +53,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "ShootBottom(side)"
+                        "pathName": "ShootMid"
                       }
                     },
                     {
@@ -69,54 +75,15 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "wait",
           "data": {
-            "commands": [
-              {
-                "type": "race",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "IntakeBottomBack(Side)"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Intake"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "parallel",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "ShootBottomBack(Side)"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "ArmForMedium"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Feed"
-                }
-              }
-            ]
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopIntakeShooter"
           }
         }
       ]

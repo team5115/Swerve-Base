@@ -138,13 +138,6 @@ public class RobotContainer {
         // Set up auto routines
         autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-        autoChooser.addOption(
-                "One note auto (manual)",
-                Commands.sequence(
-                        DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, 5000),
-                        DriveCommands.feed(intake, feeder),
-                        shooter.stop()));
-
         // Set up SysId routines
         // autoChooser.addOption(
         //         "Drive SysId (Quasistatic Forward)",
@@ -246,6 +239,14 @@ public class RobotContainer {
             Intake intake,
             Feeder feeder,
             Shooter shooter) {
+
+        NamedCommands.registerCommand(
+                "ReliableInitialShot",
+                Commands.sequence(
+                        DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, 5000),
+                        DriveCommands.feed(intake, feeder, 2),
+                        shooter.stop()));
+
         // Bring the arm down, turn the intake and shooter on, and then feed first shot
         NamedCommands.registerCommand(
                 "InitialShot",
@@ -253,7 +254,12 @@ public class RobotContainer {
                                 arm.setAngle(Rotation2d.fromDegrees(15)),
                                 intake.setSpeed(+1),
                                 shooter.spinToSpeed(5000))
-                        .andThen(feeder.setSpeeds(+1), Commands.waitSeconds(0.5)));
+                        .andThen(feeder.setSpeeds(+1), Commands.waitSeconds(1.0)));
+
+        NamedCommands.registerCommand(
+                "StopIntakeShooter", Commands.parallel(shooter.stop(), intake.stop()));
+
+        NamedCommands.registerCommand("LowerArmForIntake", arm.setAngle(Rotation2d.fromDegrees(0)));
 
         NamedCommands.registerCommand(
                 "Intake",
@@ -267,6 +273,9 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
                 "Feed", Commands.sequence(feeder.setSpeeds(+1), Commands.waitSeconds(0.5), feeder.stop()));
+        NamedCommands.registerCommand(
+                "FeedLong",
+                Commands.sequence(feeder.setSpeeds(+1), Commands.waitSeconds(1.5), feeder.stop()));
 
         NamedCommands.registerCommand("ArmForNear", arm.goToAngle(Rotation2d.fromDegrees(15), 1));
         NamedCommands.registerCommand("ArmForMedium", arm.goToAngle(Rotation2d.fromDegrees(15), 1));
