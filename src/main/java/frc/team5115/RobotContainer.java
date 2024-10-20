@@ -183,10 +183,12 @@ public class RobotContainer {
         // manip control
         climber.setDefaultCommand(climber.climbBy(() -> joyManip.getLeftY()));
 
-        joyManip.rightBumper().onTrue(climber.deploy());
-
         joyManip
                 .leftBumper()
+                .onTrue(arm.goToAngle(Rotation2d.fromDegrees(0), 3).andThen(climber.deploy()));
+
+        joyManip
+                .rightBumper()
                 .onTrue(
                         Commands.sequence(
                                 DriveCommands.automaticallyPrepareShoot(drivetrain, arm, intake, feeder, shooter),
