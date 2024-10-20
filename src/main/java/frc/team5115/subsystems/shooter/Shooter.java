@@ -66,8 +66,8 @@ public class Shooter extends SubsystemBase {
         return Commands.runOnce(() -> setpointRPM = 0, this);
     }
 
-    public Command spinToSpeed(double rpm) {
-        return Commands.runOnce(() -> setSetpoint(rpm), this)
+    public Command spinToSpeed() {
+        return Commands.runOnce(() -> setSetpoint(5000), this)
                 .andThen(Commands.waitUntil(() -> pid.atSetpoint()));
     }
 
