@@ -23,7 +23,7 @@ public final class Constants {
         REPLAY
     }
 
-    public static final double CLOSE_SHOOT_DEGREES = 13.0;
+    public static final double CLOSE_SHOOT_DEGREES = 15.0;
 
     public static final byte INTAKE_MOTOR_ID = 32;
     public static final byte SNOWBLOWER_MOTOR_ID = 21;
