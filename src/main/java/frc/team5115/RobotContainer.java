@@ -256,7 +256,7 @@ public class RobotContainer {
                 Commands.parallel(
                                 arm.setAngle(Rotation2d.fromDegrees(Constants.CLOSE_SHOOT_DEGREES)),
                                 intake.setSpeed(+1),
-                                shooter.spinToSpeed())
+                                shooter.spinToSpeed()).withTimeout(1.75)
                         .andThen(feeder.setSpeeds(+1), Commands.waitSeconds(1.0)));
 
         NamedCommands.registerCommand(
