@@ -50,8 +50,7 @@ public class DriveCommands {
 
     public static Command prepareAmp(Arm arm, Amper amper, Intake intake, Feeder feeder) {
         return Commands.sequence(
-                        arm.goToAngle(Rotation2d.fromDegrees(98.0), 1),
-                        amper.spinToAngle(new Rotation2d(3.25))
+                        arm.goToAngle(Rotation2d.fromDegrees(98.0), 1), amper.spinToAngle(new Rotation2d(3.25))
                         // ,intake.setSpeed(1),
                         // feeder.setSpeeds(0.25),
                         // Commands.waitSeconds(0.8),
@@ -71,7 +70,7 @@ public class DriveCommands {
                         intake.stop(),
                         feeder.stop(),
                         Commands.waitSeconds(0.5),
-                        amper.spinToAngle(new Rotation2d(0.2)).alongWith(arm.stow()))
+                        amper.spinToAngle(new Rotation2d(0.2)).alongWith(arm.stow()).withTimeout(1.0))
                 .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
     }
 
