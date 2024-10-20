@@ -51,12 +51,13 @@ public class DriveCommands {
     public static Command prepareAmp(Arm arm, Amper amper, Intake intake, Feeder feeder) {
         return Commands.sequence(
                         arm.goToAngle(Rotation2d.fromDegrees(98.0), 1),
-                        amper.spinToAngle(new Rotation2d(3.25)),
-                        intake.setSpeed(1),
-                        feeder.setSpeeds(0.25),
-                        Commands.waitSeconds(0.8),
-                        feeder.stop(),
-                        intake.setSpeed(-0.9))
+                        amper.spinToAngle(new Rotation2d(3.25))
+                        // ,intake.setSpeed(1),
+                        // feeder.setSpeeds(0.25),
+                        // Commands.waitSeconds(0.8),
+                        // feeder.stop(),
+                        // intake.setSpeed(-0.9)
+                        )
                 .withInterruptBehavior(InterruptionBehavior.kCancelSelf);
     }
 
