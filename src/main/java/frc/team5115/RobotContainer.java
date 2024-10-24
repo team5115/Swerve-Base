@@ -92,8 +92,8 @@ public class RobotContainer {
                                 new ModuleIOSparkMax(1),
                                 new ModuleIOSparkMax(2),
                                 new ModuleIOSparkMax(3));
-                vision = new PhotonVision(drivetrain);
-                // vision = null;
+                // vision = new PhotonVision(drivetrain);
+                vision = null;
                 noteDetectedEntry =
                         Shuffleboard.getTab("SmartDashboard").add("Has note?", false).getEntry();
                 break;
@@ -207,7 +207,8 @@ public class RobotContainer {
 
         joyManip
                 .b()
-                .onTrue(DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, 5000))
+                .onTrue(
+                        DriveCommands.prepareShoot(arm, intake, feeder, shooter, Constants.CLOSE_SHOOT_DEGREES))
                 .onFalse(
                         DriveCommands.feed(intake, feeder)
                                 .andThen(shooter.stop())
@@ -245,7 +246,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "ReliableInitialShot",
                 Commands.sequence(
-                        DriveCommands.prepareShoot(arm, intake, feeder, shooter, 15, 5000),
+                        DriveCommands.prepareShoot(arm, intake, feeder, shooter, Constants.CLOSE_SHOOT_DEGREES),
                         DriveCommands.feed(intake, feeder, 2),
                         shooter.stop()));
 
@@ -253,9 +254,10 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "InitialShot",
                 Commands.parallel(
-                                arm.setAngle(Rotation2d.fromDegrees(15)),
+                                arm.setAngle(Rotation2d.fromDegrees(Constants.CLOSE_SHOOT_DEGREES)),
                                 intake.setSpeed(+1),
-                                shooter.spinToSpeed(5000))
+                                shooter.spinToSpeed())
+                        .withTimeout(1.75)
                         .andThen(feeder.setSpeeds(+1), Commands.waitSeconds(1.0)));
 
         NamedCommands.registerCommand(
@@ -279,7 +281,8 @@ public class RobotContainer {
                 "FeedLong",
                 Commands.sequence(feeder.setSpeeds(+1), Commands.waitSeconds(1.5), feeder.stop()));
 
-        NamedCommands.registerCommand("ArmForNear", arm.goToAngle(Rotation2d.fromDegrees(15), 1));
+        NamedCommands.registerCommand(
+                "ArmForNear", arm.goToAngle(Rotation2d.fromDegrees(Constants.CLOSE_SHOOT_DEGREES), 1));
         NamedCommands.registerCommand("ArmForMedium", arm.goToAngle(Rotation2d.fromDegrees(15), 1));
         NamedCommands.registerCommand("ArmForFar", arm.goToAngle(Rotation2d.fromDegrees(25), 1));
     }
