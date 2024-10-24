@@ -92,8 +92,8 @@ public class RobotContainer {
                                 new ModuleIOSparkMax(1),
                                 new ModuleIOSparkMax(2),
                                 new ModuleIOSparkMax(3));
-                // vision = new PhotonVision(drivetrain);
-                vision = null;
+                vision = new PhotonVision(drivetrain);
+                // vision = null;
                 noteDetectedEntry =
                         Shuffleboard.getTab("SmartDashboard").add("Has note?", false).getEntry();
                 break;
