@@ -62,11 +62,10 @@ public class RobotContainer {
     private final Feeder feeder;
     private final Shooter shooter;
     private final Climber climber;
-
+    // test
     // Controller
     private final CommandXboxController joyDrive = new CommandXboxController(0);
     private final CommandXboxController joyManip = new CommandXboxController(1);
-
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
 
