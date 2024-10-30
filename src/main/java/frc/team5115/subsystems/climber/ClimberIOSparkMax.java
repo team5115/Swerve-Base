@@ -8,7 +8,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.team5115.Constants;
 
 public class ClimberIOSparkMax implements ClimberIO {
-
     public final CANSparkMax leftClimb;
     public final CANSparkMax rightClimb;
     public final RelativeEncoder leftClimbEncoder;
@@ -39,7 +38,7 @@ public class ClimberIOSparkMax implements ClimberIO {
         inputs.leftCurrentAmps = leftClimb.getOutputCurrent();
         inputs.rightCurrentAmps = rightClimb.getOutputCurrent();
         inputs.leftAppliedVolts = leftClimb.getAppliedOutput();
-        inputs.rightAppliedVolts = rightClimb.getAppliedOutput();
+        inputs.rightAppliedVolts = rightClimb.getAppliedOutput(); 
     }
 
     @Override
