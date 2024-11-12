@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
@@ -38,6 +39,7 @@ import frc.team5115.subsystems.intake.Intake;
 import frc.team5115.subsystems.intake.IntakeIO;
 import frc.team5115.subsystems.intake.IntakeIOSim;
 import frc.team5115.subsystems.intake.IntakeIOSparkMax;
+import frc.team5115.subsystems.lights.Lights;
 import frc.team5115.subsystems.shooter.Shooter;
 import frc.team5115.subsystems.shooter.ShooterIO;
 import frc.team5115.subsystems.shooter.ShooterIOSim;
@@ -62,6 +64,7 @@ public class RobotContainer {
     private final Feeder feeder;
     private final Shooter shooter;
     private final Climber climber;
+    private final Lights lights;
     // test
     // Controller
     private final CommandXboxController joyDrive = new CommandXboxController(0);
@@ -92,6 +95,9 @@ public class RobotContainer {
                                 new ModuleIOSparkMax(2),
                                 new ModuleIOSparkMax(3));
                 vision = new PhotonVision(drivetrain);
+                lights = new Lights(0, 20);
+                lights.start();
+
                 // vision = null;
                 noteDetectedEntry =
                         Shuffleboard.getTab("SmartDashboard").add("Has note?", false).getEntry();
@@ -111,6 +117,7 @@ public class RobotContainer {
                                 gyro, new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim(), new ModuleIOSim());
                 vision = null;
                 noteDetectedEntry = null;
+                lights = null;
                 break;
 
             default:
@@ -127,6 +134,7 @@ public class RobotContainer {
                                 gyro, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {}, new ModuleIO() {});
                 vision = null;
                 noteDetectedEntry = null;
+                lights = null;
                 break;
         }
 
@@ -222,6 +230,12 @@ public class RobotContainer {
     public void robotPeriodic() {
         if (noteDetectedEntry != null) {
             noteDetectedEntry.setBoolean(feeder.noteDetected());
+        }
+        //
+        boolean aligning = joyDrive.getHID().getRawButton(XboxController.Button.kB.value);
+        boolean inRange = false; // ?
+        if(lights != null){
+            lights.update(aligning, inRange);
         }
     }
 
