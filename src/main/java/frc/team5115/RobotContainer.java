@@ -232,7 +232,7 @@ public class RobotContainer {
             noteDetectedEntry.setBoolean(feeder.noteDetected());
         }
         //
-        boolean aligning = joyDrive.getHID().getRawButton(XboxController.Button.kB.value);
+        boolean aligning = joyManip.getHID().getRightBumperPressed();
         boolean inRange = false; // ?
         if(lights != null){
             lights.update(aligning, inRange);

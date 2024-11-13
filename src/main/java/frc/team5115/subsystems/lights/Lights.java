@@ -44,6 +44,73 @@ public class Lights extends SubsystemBase {
     public void stop(){
         leds.stop();
     }
+
+     public void iterateAllLeds(Function<Integer, Integer[]> function){
+        for(int i = 0; i <ledCount; i++){
+            Integer[] color = function.apply(i);
+            buffer.setRGB(i, color[0], color[1], color[2]);
+        }
+        leds.setData(buffer);
+    }
+
+    public void setUniformColor(int r, int g, int b){
+        iterateAllLeds((index) -> {
+            return new Integer[] {r, g, b};
+        });
+    }
+    
+    public void updateIdleAnimation() {
+        timer_idle ++;
+        if (timer_idle >= period) {
+            timer_idle = 0;
+        } else {
+            return;
+        }
+
+        counter_idle += direction_idle;
+        if (counter_idle == ledCount || counter_idle == -1) {
+            direction_idle = -direction_idle;
+            counter_idle += 2 * direction_idle;
+        }
+        iterateAllLeds((index) -> {
+            double percent = buffer.getLED(index).red - minPower / 1d / maxPower - decay;
+            percent = Math.max(percent, 0);
+
+            if (index == counter_idle) {
+                percent = 1.0;
+            }
+
+            final double power = (percent * (maxPower - minPower)) + minPower;
+            return new Integer[] { (int)power, 0, 0 };
+        });
+    }
+
+    private void updateAlignAnimation() {
+        timer_align ++;
+        if (timer_align >= period) {
+            timer_align = 0;
+        } else {
+            return;
+        }
+
+        position_align++;
+        if (position_align == ledCount / 2) {
+            position_align = 0;
+        }
+        iterateAllLeds((index) -> {
+            final boolean powered = 
+                index == position_align || // the current position
+                index == ledCount-1 - position_align || // the opposite side
+                index == position_align - 1 || // the left of the current position
+                index == ledCount-1 - position_align + 1; // the right of the opposite side
+
+            if (powered) {
+                return new Integer[] { 0xA5, 0x10, 0x90 };
+            } else {
+                return new Integer[] { 0, 0, 0 };
+            }
+        }); 
+    }
     
     public void update(boolean aligning, boolean inRange) {
         AnimationState state = AnimationState.Idle;
@@ -74,69 +141,5 @@ public class Lights extends SubsystemBase {
                 break;
         }
     }
-    private void updateAlignAnimation() {
-        timer_align ++;
-        if (timer_align >= period) {
-            timer_align = 0;
-        } else {
-            return;
-        }
 
-        position_align++;
-        if (position_align == ledCount / 2) {
-            position_align = 0;
-        }
-        iterateAllLeds((index) -> {
-            final boolean powered = 
-                index == position_align || // the current position
-                index == ledCount-1 - position_align || // the opposite side
-                index == position_align - 1 || // the left of the current position
-                index == ledCount-1 - position_align + 1; // the right of the opposite side
-
-            if (powered) {
-                return new Integer[] { 0xA5, 0x10, 0x90 };
-            } else {
-                return new Integer[] { 0, 0, 0 };
-            }
-        }); 
-    }
-
-    public void updateIdleAnimation() {
-        timer_idle ++;
-        if (timer_idle >= period) {
-            timer_idle = 0;
-        } else {
-            return;
-        }
-
-        counter_idle += direction_idle;
-        if (counter_idle == ledCount || counter_idle == -1) {
-            direction_idle = -direction_idle;
-            counter_idle += 2 * direction_idle;
-        }
-        iterateAllLeds((index) -> {
-            double percent = buffer.getLED(index).red - minPower / 1d / maxPower - decay;
-            percent = Math.max(percent, 0);
-
-            if (index == counter_idle) {
-                percent = 1.0;
-            }
-
-            final double power = (percent * (maxPower - minPower)) + minPower;
-            return new Integer[] { (int)power, 0, 0 };
-        });
-    }
-    public void setUniformColor(int r, int g, int b){
-        iterateAllLeds((index) -> {
-            return new Integer[] {r, g, b};
-        });
-    }
-    public void iterateAllLeds(Function<Integer, Integer[]> function){
-        for(int i = 0; i <ledCount; i++){
-            Integer[] color = function.apply(i);
-            buffer.setRGB(i, color[0], color[1], color[2]);
-        }
-        leds.setData(buffer);
-    }
-    
 }
