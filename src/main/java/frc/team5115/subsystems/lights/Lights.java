@@ -45,10 +45,18 @@ public class Lights extends SubsystemBase {
         leds.stop();
     }
 
-     public void iterateAllLeds(Function<Integer, Integer[]> function){
-        for(int i = 0; i <ledCount; i++){
+    public void iterateAllLeds(Function<Integer, Integer[]> function) { //only use this function when turning LEDS on 
+        int ledsOnCount = 0;
+        for (int i = 0; i < ledCount; i++) {
             Integer[] color = function.apply(i);
-            buffer.setRGB(i, color[0], color[1], color[2]);
+            if (color[0] > 0 || color[1] > 0 || color[2] > 0) {
+                ledsOnCount++;
+            }
+            if (ledsOnCount > 30) {
+                buffer.setRGB(i, 0, 0, 0);
+            } else {
+                buffer.setRGB(i, color[0], color[1], color[2]);
+            }
         }
         leds.setData(buffer);
     }
